@@ -2,7 +2,7 @@ package com.juan.shopping.sqlitemodel;
 
 public class Item {
 
-	String upc;
+	String UPC;
 	String name;
 	String category;
 
@@ -15,15 +15,15 @@ public class Item {
 		this.category = category;
 	}
 
-	public Item(String upc, String name, String category) {
-		this.upc = upc;
+	public Item(String UPC, String name, String category) {
+		this.UPC = UPC;
 		this.name = name;
 		this.category = category;
 	}
 
 	// setters
-	public void setUpc(String upc) {
-		this.upc = upc;
+	public void setUPC(String UPC) {
+		this.UPC = UPC;
 	}
 
 	public void setName(String name) {
@@ -35,8 +35,8 @@ public class Item {
 	}
 
 	// getters
-	public String getUpc() {
-		return this.upc;
+	public String getUPC() {
+		return this.UPC;
 	}
 
 	public String getName() {

@@ -9,20 +9,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.juan.shopping.sqlitehelper.DatabaseHelper;
+import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 
 public class MainActivity extends Activity {
 
 	// Database Helper
-	DatabaseHelper db;
+	StoreDatabaseHelper db;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		db = new DatabaseHelper(getApplicationContext());
+		db = new StoreDatabaseHelper(getApplicationContext());
 
 		// Creating items
 		Item item1 = new Item("000000000001", "Oreos", "Cookies");

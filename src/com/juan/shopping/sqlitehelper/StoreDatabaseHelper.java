@@ -16,7 +16,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class StoreDatabaseHelper extends SQLiteOpenHelper {
 
 	// Logcat tag
 	private static final String LOG = "DatabaseHelper";
@@ -28,19 +28,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "contactsManager";
 
 	// Table Names
-	private static final String TABLE_ITEM = "items";
+	private static final String TABLE_STORE = "store";
 
 	// ITEMS Table - column names
-	private static final String KEY_UPC = "upc";
+	private static final String KEY_UPC = "UPC";
 	private static final String KEY_NAME = "name";
 	private static final String KEY_CATEGORY = "category";
 
 	// Item table create statement
-	private static final String CREATE_TABLE_ITEM = "CREATE TABLE "
-			+ TABLE_ITEM + "(" + KEY_UPC + " TEXT PRIMARY KEY," + KEY_NAME
+	private static final String CREATE_TABLE_STORE = "CREATE TABLE "
+			+ TABLE_STORE + "(" + KEY_UPC + " TEXT PRIMARY KEY," + KEY_NAME
 			+ " TEXT," + KEY_CATEGORY + " TEXT" + ")";
 	
-	public DatabaseHelper(Context context) {
+	public StoreDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
@@ -48,38 +48,38 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 
 		// creating required tables
-		db.execSQL(CREATE_TABLE_ITEM);
+		db.execSQL(CREATE_TABLE_STORE);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// on upgrade drop older tables
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_ITEM);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_STORE);
 		// create new tables
 		onCreate(db);
 	}
 
-	//**************************************************************//
-	//********************* ITEMS table methods ********************//
-	//**************************************************************//
+	  //************************************************************//
+	 //******************** Store table methods *******************//
+	//************************************************************//
 	
 	// Create an item
 	public void createItem(Item item) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_UPC, item.getUpc());
+		values.put(KEY_UPC, item.getUPC());
 		values.put(KEY_NAME, item.getName());
 		values.put(KEY_CATEGORY, item.getCategory());
 
-		db.insert(TABLE_ITEM, null, values);
+		db.insert(TABLE_STORE, null, values);
 	}
 
 	// query a single item
 	public Item getItem(long item_upc) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		String selectQuery = "SELECT  * FROM " + TABLE_ITEM + " WHERE "
+		String selectQuery = "SELECT  * FROM " + TABLE_STORE + " WHERE "
 				+ KEY_UPC + " = " + item_upc;
 
 		Log.e(LOG, selectQuery);
@@ -90,7 +90,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			c.moveToFirst();
 
 		Item td = new Item();
-		td.setUpc(c.getString(c.getColumnIndex(KEY_UPC)));
+		td.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
 		td.setName((c.getString(c.getColumnIndex(KEY_NAME))));
 		td.setCategory((c.getString(c.getColumnIndex(KEY_CATEGORY))));
 		
@@ -101,7 +101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public List<Item> getAllItemsByCategory(String category) {
 		List<Item> items = new ArrayList<Item>();
 
-		String selectQuery = "SELECT  * FROM " + TABLE_ITEM
+		String selectQuery = "SELECT  * FROM " + TABLE_STORE
 				+ " WHERE "	+ KEY_CATEGORY + " = " + "'" + category + "'";
 
 		Log.e(LOG, selectQuery);
@@ -113,7 +113,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				Item td = new Item();
-				td.setUpc(c.getString((c.getColumnIndex(KEY_UPC))));
+				td.setUPC(c.getString((c.getColumnIndex(KEY_UPC))));
 				td.setName((c.getString(c.getColumnIndex(KEY_NAME))));
 				td.setCategory(c.getString(c.getColumnIndex(KEY_CATEGORY)));
 
@@ -127,7 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	// Getting number of items in store
 	public int getItemCount() {
-		String countQuery = "SELECT  * FROM " + TABLE_ITEM;
+		String countQuery = "SELECT  * FROM " + TABLE_STORE;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(countQuery, null);
 
@@ -143,19 +143,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_UPC, item.getUpc());
+		values.put(KEY_UPC, item.getUPC());
 		values.put(KEY_NAME, item.getName());
 		values.put(KEY_CATEGORY, item.getCategory());
 
 		// updating row
-		db.update(TABLE_ITEM, values, KEY_UPC + " = ?",
-				new String[] { String.valueOf(item.getUpc()) });
+		db.update(TABLE_STORE, values, KEY_UPC + " = ?",
+				new String[] { String.valueOf(item.getUPC()) });
 	}
 
 	// Deleting an item
 	public void deleteItem(String upc) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_ITEM, KEY_UPC + " = ?",
+		db.delete(TABLE_STORE, KEY_UPC + " = ?",
 				new String[] { upc });
 	}
 	
@@ -164,7 +164,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		List<String> categoryList = new ArrayList<String>();
 
 		String selectQuery = "SELECT  DISTINCT " + KEY_CATEGORY 
-				+ " FROM " + TABLE_ITEM;
+				+ " FROM " + TABLE_STORE;
 		
 		Log.e(LOG, selectQuery);
 

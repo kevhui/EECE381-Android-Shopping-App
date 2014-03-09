@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.juan.shopping.sqlitehelper.DatabaseHelper;
+import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 
 public class DisplayItems extends ListActivity{
@@ -24,8 +24,8 @@ public class DisplayItems extends ListActivity{
 	    
 	    List<String> categoryList = new ArrayList<String>();
 	    
-		DatabaseHelper db;
-		db = new DatabaseHelper(getApplicationContext());
+		StoreDatabaseHelper db;
+		db = new StoreDatabaseHelper(getApplicationContext());
 		List<Item> itemFilteredList = db.getAllItemsByCategory(category);
 		for (Item item : itemFilteredList) {
 			categoryList.add(item.getName());
@@ -42,6 +42,6 @@ public class DisplayItems extends ListActivity{
 	  @Override
 	  protected void onListItemClick(ListView l, View v, int position, long id) {
 	    String item = (String) getListAdapter().getItem(position);
-	    Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
+	    Toast.makeText(this, item + " Added to shopping list", Toast.LENGTH_LONG).show();
 	  }
 }

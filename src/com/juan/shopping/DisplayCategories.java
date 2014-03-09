@@ -3,8 +3,7 @@ package com.juan.shopping;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.juan.shopping.sqlitehelper.DatabaseHelper;
-import com.juan.shopping.sqlitemodel.Item;
+import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -21,8 +20,8 @@ public class DisplayCategories extends ListActivity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		DatabaseHelper db;
-		db = new DatabaseHelper(getApplicationContext());
+		StoreDatabaseHelper db;
+		db = new StoreDatabaseHelper(getApplicationContext());
 		List<String> categoryList = db.getAllCategories();
 		// Don't forget to close database connection
 		db.closeDB();
