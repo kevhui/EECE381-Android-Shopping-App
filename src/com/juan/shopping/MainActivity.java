@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 
@@ -16,6 +17,7 @@ public class MainActivity extends Activity {
 
 	// Database Helper
 	StoreDatabaseHelper db;
+	ShoppingListDatabaseHelper shoppingListdb;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +64,26 @@ public class MainActivity extends Activity {
 		// Don't forget to close database connection
 		db.closeDB();
 		
+		Log.d("ShoppingList", "HI");
+		shoppingListdb = new ShoppingListDatabaseHelper(getApplicationContext());
+		Log.d("ShoppingList", "HI");
+		shoppingListdb.addItem("000000000009", 1);
+		Log.d("ShoppingList", "HI");
+		shoppingListdb.addItem("000000000008", 1);
+		Log.d("ShoppingList", "HI");
+		shoppingListdb.addItem("000000000007", 1);
+		Log.d("ShoppingList", "HI");
+		shoppingListdb.closeDB();
+		Log.d("ShoppingList", "HI");
 	}
 	
-	public void onClickShoppingList(View view) {		
+	public void onClickEditShoppingList(View view) {		
 	    Intent intent = new Intent(this, DisplayCategories.class);
+	    startActivity(intent);
+	}
+	
+	public void onClickViewShoppingList(View view) {		
+	    Intent intent = new Intent(this, DisplayShoppingCart.class);
 	    startActivity(intent);
 	}
 }

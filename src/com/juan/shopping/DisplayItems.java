@@ -11,11 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 
 public class DisplayItems extends ListActivity{
-	@Override
+	
+	private List<Item> itemFilteredList;
+	
+	@Override	
 	  public void onCreate(Bundle icicle) {
 	    super.onCreate(icicle);
 	    
@@ -26,11 +30,10 @@ public class DisplayItems extends ListActivity{
 	    
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
-		List<Item> itemFilteredList = db.getAllItemsByCategory(category);
+		itemFilteredList = db.getAllItemsByCategory(category);
 		for (Item item : itemFilteredList) {
 			categoryList.add(item.getName());
 		}
-		// Don't forget to close database connection
 		db.closeDB();
 		
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -38,10 +41,14 @@ public class DisplayItems extends ListActivity{
 		
 	    setListAdapter(adapter);
 	  }
-
+	
 	  @Override
 	  protected void onListItemClick(ListView l, View v, int position, long id) {
-	    String item = (String) getListAdapter().getItem(position);
-	    Toast.makeText(this, item + " Added to shopping list", Toast.LENGTH_LONG).show();
+		Item item = itemFilteredList.get(position);
+	    Toast.makeText(this, item.getName() + " Added to shopping list", Toast.LENGTH_LONG).show();
+	    
+		ShoppingListDatabaseHelper db = new ShoppingListDatabaseHelper(getApplicationContext());
+		db.addItem(item.getUPC(), 1);
+		db.closeDB();
 	  }
 }

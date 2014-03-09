@@ -17,7 +17,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class ShoppingListIDatabaseHelper extends SQLiteOpenHelper {
+public class ShoppingListDatabaseHelper extends SQLiteOpenHelper {
 
 	// Logcat tag
 	private static final String LOG = "DatabaseHelper";
@@ -26,10 +26,10 @@ public class ShoppingListIDatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	// Database Name
-	private static final String DATABASE_NAME = "contactsManager";
+	private static final String DATABASE_NAME = "ShoppingList";
 
 	// Table Names
-	private static final String TABLE_SHOPPING_LIST = "shoppinglist";
+	private static final String TABLE_SHOPPING_LIST = "shoppingList";
 
 	// ITEMS Table - column names
 	private static final String KEY_UPC = "UPC";
@@ -38,17 +38,18 @@ public class ShoppingListIDatabaseHelper extends SQLiteOpenHelper {
 	// Item table create statement
 	private static final String CREATE_TABLE_SHOPPING_LIST = "CREATE TABLE "
 			+ TABLE_SHOPPING_LIST + "(" + KEY_UPC + " TEXT PRIMARY KEY,"
-			+ KEY_QUANTITY	+ " INTEGER)";
+			+ KEY_QUANTITY	+ " INTEGER" + ")";
 	
-	public ShoppingListIDatabaseHelper(Context context) {
+	public ShoppingListDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-
+		Log.e(LOG, "IS THIS WORKING");
 		// creating required tables
 		db.execSQL(CREATE_TABLE_SHOPPING_LIST);
+		Log.e(LOG, "IS THIS WORKING");
 	}
 
 	@Override
@@ -65,19 +66,19 @@ public class ShoppingListIDatabaseHelper extends SQLiteOpenHelper {
 	
 	// Adding an item
 		//TODO: Make it increment the quantity
-	public void addItem(String UPC) {
+	public void addItem(String UPC, int quantity) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_UPC, UPC);
-		values.put(KEY_QUANTITY, 1);
+		values.put(KEY_QUANTITY, quantity);
 
 		db.insert(TABLE_SHOPPING_LIST, null, values);
 	}
 
 
 	// query the whole shopping list
-	public List<Shopping_list_item> getAllItems(String category) {
+	public List<Shopping_list_item> getAllItems() {
 		List<Shopping_list_item> shoppingList = new ArrayList<Shopping_list_item>();
 
 		String selectQuery = "SELECT  * FROM " + TABLE_SHOPPING_LIST;
@@ -91,8 +92,8 @@ public class ShoppingListIDatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				Shopping_list_item item = new Shopping_list_item();
-				item.setUPC(c.getString((c.getColumnIndex(KEY_UPC))));
-				item.setQuantity(c.getInt((c.getColumnIndex(KEY_QUANTITY))));
+				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
 				// adding item to list
 				shoppingList.add(item);
 			} while (c.moveToNext());
@@ -129,13 +130,4 @@ public class ShoppingListIDatabaseHelper extends SQLiteOpenHelper {
 			db.close();
 	}
 
-	/**
-	 * get datetime
-	 * */
-	private String getDateTime() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(
-				"yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-		Date date = new Date();
-		return dateFormat.format(date);
-	}
 }

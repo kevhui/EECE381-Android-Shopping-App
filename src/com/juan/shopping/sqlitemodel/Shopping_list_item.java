@@ -24,11 +24,11 @@ public class Shopping_list_item {
 	}
 
 	// getters
-	public String getUPC(String UPC) {
+	public String getUPC() {
 		return this.UPC;
 	}
 
-	public int getQuantity(int quantity) {
+	public int getQuantity() {
 		return this.quantity;
 	}
 	

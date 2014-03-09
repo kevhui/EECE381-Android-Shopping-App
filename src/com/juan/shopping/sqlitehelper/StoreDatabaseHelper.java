@@ -25,7 +25,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	// Database Name
-	private static final String DATABASE_NAME = "contactsManager";
+	private static final String DATABASE_NAME = "StoreList";
 
 	// Table Names
 	private static final String TABLE_STORE = "store";
@@ -76,11 +76,11 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	// query a single item
-	public Item getItem(long item_upc) {
+	public Item getItem(String upc) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
 		String selectQuery = "SELECT  * FROM " + TABLE_STORE + " WHERE "
-				+ KEY_UPC + " = " + item_upc;
+				+ KEY_UPC + " = " + "'" + upc + "'";
 
 		Log.e(LOG, selectQuery);
 
