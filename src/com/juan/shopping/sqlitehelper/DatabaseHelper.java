@@ -159,6 +159,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				new String[] { upc });
 	}
 	
+	// query all categories
+	public List<String> getAllCategories() {
+		List<String> categoryList = new ArrayList<String>();
+
+		String selectQuery = "SELECT  DISTINCT " + KEY_CATEGORY 
+				+ " FROM " + TABLE_ITEM;
+		
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				categoryList.add(c.getString(c.getColumnIndex(KEY_CATEGORY)));
+			} while (c.moveToNext());
+		}
+
+		return categoryList;
+	}
+	
 
 	// closing database
 	public void closeDB() {

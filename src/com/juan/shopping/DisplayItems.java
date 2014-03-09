@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,13 +19,16 @@ public class DisplayItems extends ListActivity{
 	  public void onCreate(Bundle icicle) {
 	    super.onCreate(icicle);
 	    
+	    Intent intent = getIntent();
+	    String category = intent.getStringExtra("com.juan.shopping.CATEGORY");
+	    
 	    List<String> categoryList = new ArrayList<String>();
 	    
 		DatabaseHelper db;
 		db = new DatabaseHelper(getApplicationContext());
-		List<Item> itemFilteredList = db.getAllItemsByCategory("Fruits");
+		List<Item> itemFilteredList = db.getAllItemsByCategory(category);
 		for (Item item : itemFilteredList) {
-			categoryList.add(item.getCategory());
+			categoryList.add(item.getName());
 		}
 		// Don't forget to close database connection
 		db.closeDB();
