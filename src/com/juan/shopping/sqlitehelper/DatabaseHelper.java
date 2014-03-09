@@ -158,6 +158,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.delete(TABLE_ITEM, KEY_UPC + " = ?",
 				new String[] { upc });
 	}
+	
 
 	// closing database
 	public void closeDB() {

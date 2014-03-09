@@ -2,12 +2,15 @@ package com.juan.shopping;
 
 import java.util.List;
 
-import com.juan.shopping.sqlitehelper.DatabaseHelper;
-import com.juan.shopping.sqlitemodel.Item;
-
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+
+import com.juan.shopping.sqlitehelper.DatabaseHelper;
+import com.juan.shopping.sqlitemodel.Item;
 
 public class MainActivity extends Activity {
 
@@ -59,5 +62,10 @@ public class MainActivity extends Activity {
 		// Don't forget to close database connection
 		db.closeDB();
 		
+	}
+	
+	public void onClickShoppingList(View view) {		
+	    Intent intent = new Intent(this, DisplayCategories.class);
+	    startActivity(intent);
 	}
 }
