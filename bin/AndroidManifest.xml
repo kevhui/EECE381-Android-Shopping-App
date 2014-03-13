@@ -26,10 +26,20 @@
             android:name="com.juan.shopping.DisplayCategories"
             android:label="@string/app_name" >
         </activity>
-          <activity
+        <activity
+            android:name=".DisplayShoppingCart"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".BarcodeScanner"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="com.juan.shopping.DisplayItems"
             android:label="@string/app_name" >
-        </activity>              
+        </activity>
+        
+        
         
     </application>
 

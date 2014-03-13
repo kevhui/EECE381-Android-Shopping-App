@@ -26,9 +26,7 @@ public class MainActivity extends Activity {
 		storedb = new StoreDatabaseHelper(getApplicationContext());
 		storedb.closeDB();
 		shoppingListdb = new ShoppingListDatabaseHelper(getApplicationContext());
-		shoppingListdb.closeDB();
-		
-
+		shoppingListdb.closeDB();	
 	}
 	
 	public void onClickEditShoppingList(View view) {		
@@ -40,4 +38,10 @@ public class MainActivity extends Activity {
 	    Intent intent = new Intent(this, DisplayShoppingCart.class);
 	    startActivity(intent);
 	}
+	
+	public void onClickBarcodeScanner(View view) {	
+	    Intent intent = new Intent(this, BarcodeScanner.class);
+	    startActivity(intent);
+	}
+	
 }

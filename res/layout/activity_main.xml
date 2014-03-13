@@ -19,12 +19,32 @@
         android:text="TeamJuanShoppingApp" />
     
     <Button
-        android:id="@+id/bShoppingList"
+        android:id="@+id/bEditShoppingList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Shopping List" 
-        android:onClick="onClickShoppingList"/>
+        android:text="Edit Shopping List" 
+        android:onClick="onClickEditShoppingList"/>
 
+    <Button
+        android:id="@+id/bViewShoppingList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/bEditShoppingList"
+        android:layout_below="@id/bEditShoppingList"
+        android:layout_marginTop="48dp"
+        android:text="View Shopping List" 
+        android:onClick="onClickViewShoppingList"/>
+
+    <Button
+        android:id="@+id/bScanBarcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp"
+        android:text="Scan Barcode"
+		android:onClick="onClickBarcodeScanner"/>
+   
 </RelativeLayout>
