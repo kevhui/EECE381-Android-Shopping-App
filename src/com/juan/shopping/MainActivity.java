@@ -39,6 +39,11 @@ public class MainActivity extends Activity {
 	    startActivity(intent);
 	}
 	
+	public void onCheckoutList(View view) {	
+	    Intent intent = new Intent(this, DisplayCheckoutList.class);
+	    startActivity(intent);
+	}
+	
 	public void onClickBarcodeScanner(View view) {	
 	    Intent intent = new Intent(this, BarcodeScanner.class);
 	    startActivity(intent);
