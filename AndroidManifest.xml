@@ -27,13 +27,20 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="com.juan.shopping.DisplayShoppingCart"
+            android:name=".DisplayShoppingCart"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name=".BarcodeScanner"
             android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.juan.shopping.DisplayItems"
             android:label="@string/app_name" >
         </activity>
+        
+        
+        
     </application>
 
 </manifest>

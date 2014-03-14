@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
-
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
@@ -25,7 +22,6 @@ public class DisplayShoppingCart extends ListActivity{
 		ShoppingListDatabaseHelper db;
 		db = new ShoppingListDatabaseHelper(getApplicationContext());
 		List<Shopping_list_item> shoppingList = db.getAllItems();
-		// Don't forget to close database connection
 		db.closeDB();
 
 		StoreDatabaseHelper storeDb = new StoreDatabaseHelper(getApplicationContext());

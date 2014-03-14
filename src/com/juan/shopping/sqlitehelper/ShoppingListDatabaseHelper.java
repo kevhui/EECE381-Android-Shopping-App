@@ -1,13 +1,8 @@
 package com.juan.shopping.sqlitehelper;
 
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-
-import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.Shopping_list_item;
 
 import android.content.ContentValues;
@@ -32,7 +27,7 @@ public class ShoppingListDatabaseHelper extends SQLiteOpenHelper {
 	private static final String TABLE_SHOPPING_LIST = "shoppingList";
 
 	// ITEMS Table - column names
-	private static final String KEY_UPC = "UPC";
+	private static final String KEY_UPC = "upc";
 	private static final String KEY_QUANTITY = "quantity";
 
 	// Item table create statement
@@ -46,10 +41,8 @@ public class ShoppingListDatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		Log.e(LOG, "IS THIS WORKING");
 		// creating required tables
 		db.execSQL(CREATE_TABLE_SHOPPING_LIST);
-		Log.e(LOG, "IS THIS WORKING");
 	}
 
 	@Override

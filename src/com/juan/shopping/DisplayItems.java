@@ -48,7 +48,7 @@ public class DisplayItems extends ListActivity{
 	    Toast.makeText(this, item.getName() + " Added to shopping list", Toast.LENGTH_LONG).show();
 	    
 		ShoppingListDatabaseHelper db = new ShoppingListDatabaseHelper(getApplicationContext());
-		db.addItem(item.getUPC(), 1);
+		db.addItem(item.getUpc(), 1);
 		db.closeDB();
 	  }
 }
