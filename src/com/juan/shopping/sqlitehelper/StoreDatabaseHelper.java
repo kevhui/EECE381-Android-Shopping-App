@@ -29,7 +29,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
 	private static final int DATABASE_VERSION = 1;
 
 	// Database Name
-	private static final String DATABASE_NAME = "walmart.sqlite3";
+	private static final String DATABASE_NAME = "walmart.db";
 
 	// Database Path
 	private static final String DATABASE_PATH = "/data/data/com.juan.shopping/databases/";

@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import com.juan.shopping.sqlitehelper.ExternalDbOpenHelper;
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 
@@ -39,7 +37,7 @@ public class MainActivity extends Activity {
 	    startActivity(intent);
 	}
 	
-	public void onCheckoutList(View view) {	
+	public void onClickCheckoutList(View view) {	
 	    Intent intent = new Intent(this, DisplayCheckoutList.class);
 	    startActivity(intent);
 	}

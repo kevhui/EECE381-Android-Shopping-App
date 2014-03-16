@@ -22,19 +22,13 @@ public final class R {
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
+        public static final int shadowed_background=0x7f020001;
+        public static final int tv_background_with_divider=0x7f020002;
     }
     public static final class id {
-<<<<<<< HEAD
-        public static final int CategoryList=0x7f080006;
-        public static final int action_settings=0x7f080007;
-        public static final int bShoppingList=0x7f080001;
-        public static final int categoryName=0x7f080003;
-        public static final int icon=0x7f080002;
-        public static final int itemName=0x7f080005;
-        public static final int label=0x7f080004;
-=======
-        public static final int CategoryList=0x7f08000f;
-        public static final int action_settings=0x7f080010;
+        public static final int CategoryList=0x7f080013;
+        public static final int action_settings=0x7f080014;
+        public static final int bAddToCart=0x7f080012;
         public static final int bCheckoutList=0x7f080003;
         public static final int bEditShoppingList=0x7f080001;
         public static final int bScanBarcode=0x7f080004;
@@ -42,9 +36,11 @@ public final class R {
         public static final int categoryName=0x7f08000c;
         public static final int icon=0x7f08000b;
         public static final int itemName=0x7f08000e;
+        public static final int ivItemImage=0x7f08000f;
         public static final int label=0x7f08000d;
+        public static final int npNumberItems=0x7f080011;
+        public static final int rlPopUp=0x7f080010;
         public static final int scan_button=0x7f080005;
->>>>>>> origin/camera_barcode_scanner
         public static final int textView1=0x7f080000;
         public static final int tv_category=0x7f08000a;
         public static final int tv_description=0x7f080008;
@@ -54,23 +50,19 @@ public final class R {
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
-<<<<<<< HEAD
-        public static final int list_categories=0x7f030001;
-        public static final int list_items=0x7f030002;
-        public static final int store_categories=0x7f030003;
-=======
         public static final int barcode_scanner=0x7f030001;
         public static final int list_categories=0x7f030002;
         public static final int list_items=0x7f030003;
-        public static final int shopping_list=0x7f030004;
-        public static final int store_categories=0x7f030005;
->>>>>>> origin/camera_barcode_scanner
+        public static final int popup_add_item=0x7f030004;
+        public static final int shopping_list=0x7f030005;
+        public static final int store_categories=0x7f030006;
     }
     public static final class menu {
         public static final int main=0x7f070000;
     }
     public static final class string {
         public static final int action_settings=0x7f050001;
+        public static final int add_item_name=0x7f050003;
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050002;
     }
