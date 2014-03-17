@@ -17,7 +17,6 @@ public class DisplayCategories extends ListActivity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
-		
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
 		List<String> categoryList = db.getAllCategories();
