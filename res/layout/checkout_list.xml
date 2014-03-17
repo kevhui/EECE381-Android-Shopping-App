@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:layout_height="fill_parent">
  
-    <ListView
-        android:id="@+id/LIST_OF_ITEMS"
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:divider="#b5b5b5"
-        android:dividerHeight="1dp"/>
+        android:layout_height="fill_parent"    
+        android:orientation="vertical"
+        android:weightSum="2.0">
+	    <ListView
+	        android:id="@+id/LIST_OF_ITEMS"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0dp"
+	        android:divider="#b5b5b5"
+	        android:layout_weight="1.81"
+	        android:dividerHeight="1dp"/>
+	    
+	    <View
+	        android:layout_height="0dp"
+	        android:layout_width="fill_parent"
+	        android:layout_weight="0.19"
+    	/>
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -20,9 +33,9 @@
     	android:weightSum="1.0">
 	    <TextView
 			android:id="@+id/TOTAL_PRICE"
-		    android:layout_width="wrap_content"
+		    android:layout_width="0dp"
 	        android:layout_height="wrap_content"
-	        android:textSize="40dp"
+	        android:textSize="40sp"
 			android:text="TOTAL" 
 			android:layout_weight="0.9"
 			android:layout_marginLeft="20dp"/>
@@ -30,7 +43,7 @@
 	        android:id="@+id/CheckoutButton"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	        android:textSize="30dp"
+	        android:textSize="30sp"
 	        android:text="Checkout"
 	        android:layout_marginRight="10dp"/>
 	</LinearLayout>
