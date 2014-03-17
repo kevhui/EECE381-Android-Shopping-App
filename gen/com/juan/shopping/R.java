@@ -26,22 +26,23 @@ public final class R {
         public static final int tv_background_with_divider=0x7f020002;
     }
     public static final class id {
-        public static final int CategoryList=0x7f080015;
+        public static final int CategoryList=0x7f080016;
+        public static final int CheckoutButton=0x7f08000d;
         public static final int LIST_OF_ITEMS=0x7f08000b;
         public static final int TOTAL_PRICE=0x7f08000c;
-        public static final int action_settings=0x7f080016;
-        public static final int bAddToCart=0x7f080014;
+        public static final int action_settings=0x7f080017;
+        public static final int bAddToCart=0x7f080015;
         public static final int bCheckoutList=0x7f080003;
         public static final int bEditShoppingList=0x7f080001;
         public static final int bScanBarcode=0x7f080004;
         public static final int bViewShoppingList=0x7f080002;
-        public static final int categoryName=0x7f08000e;
-        public static final int icon=0x7f08000d;
-        public static final int itemName=0x7f080010;
-        public static final int ivItemImage=0x7f080011;
-        public static final int label=0x7f08000f;
-        public static final int npNumberItems=0x7f080013;
-        public static final int rlPopUp=0x7f080012;
+        public static final int categoryName=0x7f08000f;
+        public static final int icon=0x7f08000e;
+        public static final int itemName=0x7f080011;
+        public static final int ivItemImage=0x7f080012;
+        public static final int label=0x7f080010;
+        public static final int npNumberItems=0x7f080014;
+        public static final int rlPopUp=0x7f080013;
         public static final int scan_button=0x7f080005;
         public static final int textView1=0x7f080000;
         public static final int tv_category=0x7f08000a;
