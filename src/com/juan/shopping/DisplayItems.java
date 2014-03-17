@@ -70,6 +70,7 @@ public class DisplayItems extends ListActivity {
 		
 		np.setMinValue(0);
         np.setMaxValue(99);
+        np.setValue(1);
         np.setWrapSelectorWheel(false); 
 
 		btnDismiss.setOnClickListener(new Button.OnClickListener() {
