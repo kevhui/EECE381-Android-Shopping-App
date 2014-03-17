@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:text="TeamJuanShoppingApp" />
     
     <Button

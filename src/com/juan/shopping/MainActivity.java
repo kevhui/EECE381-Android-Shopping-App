@@ -26,7 +26,7 @@ public class MainActivity extends Activity {
 		storedb = new StoreDatabaseHelper(getApplicationContext());
 		storedb.closeDB();
 		shoppingListdb = new ShoppingListDatabaseHelper(getApplicationContext());
-		shoppingListdb.closeDB();	
+		shoppingListdb.closeDB();
 	}
 	
 	public void onClickEditShoppingList(View view) {		
@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 	    startActivity(intent);
 	}
 	
-	public void onCheckoutList(View view) {	
+	public void onClickCheckoutList(View view) {	
 	    Intent intent = new Intent(this, DisplayCheckoutList.class);
 	    startActivity(intent);
 	}
