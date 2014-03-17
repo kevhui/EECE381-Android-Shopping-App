@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
@@ -34,6 +37,14 @@ public class DisplayShoppingCart extends ListActivity{
 				R.layout.shopping_list, R.id.itemName, names);
 
 		setListAdapter(adapter);
+	}
+	
+	@Override
+	protected void onListItemClick(ListView l, View v, int position, long id) {
+	    Intent intent = new Intent(this, DisplayItems.class);
+	    String message = l.getItemAtPosition(position).toString();
+	    intent.putExtra("com.juan.shopping.CATEGORY", message);
+	    startActivity(intent);
 	}
 
 }
