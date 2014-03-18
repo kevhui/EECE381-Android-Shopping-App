@@ -16,12 +16,7 @@ public class DisplayCategories extends ListActivity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-<<<<<<< HEAD
-		
-		//Open database and query all the categories
-=======
 
->>>>>>> checkout
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
 		List<String> categoryList = db.getAllCategories();
