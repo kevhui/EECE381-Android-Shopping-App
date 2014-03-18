@@ -3,6 +3,7 @@ package com.juan.shopping;
 import android.app.Activity;
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,6 @@ public class BarcodeScanner extends Activity{
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.barcode_scanner);
 
@@ -36,11 +36,9 @@ public class BarcodeScanner extends Activity{
 
 	
 	public void onClickScanButton(View view) {		
+		Log.i(this.getClass().toString(), "Launching an intent to zxing to scan barcode");
 		IntentIntegrator scanIntegrator = new IntentIntegrator(this);
 		scanIntegrator.initiateScan();
-	    Toast toast = Toast.makeText(getApplicationContext(), 
-		        "Button pressed!", Toast.LENGTH_SHORT);
-		    toast.show();
 	}
 	
 	@Override

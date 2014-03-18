@@ -39,6 +39,7 @@ public class DisplayItems extends ListActivity {
 
 		List<String> categoryList = new ArrayList<String>();
 
+		//Open database and query all items with a certain category
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
 		itemFilteredList = db.getAllItemsByCategory(category);
@@ -47,6 +48,7 @@ public class DisplayItems extends ListActivity {
 		}
 		db.closeDB();
 
+		//Display the items
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.list_categories, R.id.categoryName, categoryList);
 
@@ -55,12 +57,15 @@ public class DisplayItems extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Log.e(this.getClass().toString(), "Item Clicked");
 		clickedItem = itemFilteredList.get(position);
+		
+		Log.i(this.getClass().toString(), "Item: " + clickedItem + "was clicked");
+
 
 		LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
 
+		//Setup the popupView
 		View popupView = layoutInflater.inflate(R.layout.popup_add_item, null);
 		final PopupWindow popupWindow = new PopupWindow(popupView,
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -68,14 +73,18 @@ public class DisplayItems extends ListActivity {
 		np = (NumberPicker) popupView.findViewById(R.id.npNumberItems);
 		Button btnDismiss = (Button) popupView.findViewById(R.id.bAddToCart);
 		
+		//Setup the number picker
 		np.setMinValue(0);
         np.setMaxValue(99);
         np.setWrapSelectorWheel(false); 
 
+        //Button add the item and quantity to the shopping cart
 		btnDismiss.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
+				
+				Log.i(this.getClass().toString(), "Item: " + clickedItem + "was added to shopping Cart");
+				
 				ShoppingListDatabaseHelper db = new ShoppingListDatabaseHelper(
 						getApplicationContext());
 				db.addItem(clickedItem.getUpc(), np.getValue());
@@ -85,9 +94,9 @@ public class DisplayItems extends ListActivity {
 		});
 
 
+		//Disable background clicking
 		popupWindow.setFocusable(true);
 		popupWindow.setOutsideTouchable(true);
-
 		popupWindow.setBackgroundDrawable(new Drawable() {
 
 			@Override
@@ -115,6 +124,7 @@ public class DisplayItems extends ListActivity {
 			}
 		});
 
+		//Show the popUp
 		popupWindow.update();
 		popupWindow.showAtLocation(v, Gravity.CENTER, 0, 0);
 	}

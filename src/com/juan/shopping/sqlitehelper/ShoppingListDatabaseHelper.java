@@ -60,6 +60,7 @@ public class ShoppingListDatabaseHelper extends SQLiteOpenHelper {
 	// Adding an item
 		//TODO: Make it increment the quantity
 	public void addItem(String UPC, int quantity) {
+	
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -67,6 +68,7 @@ public class ShoppingListDatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_QUANTITY, quantity);
 
 		db.insert(TABLE_SHOPPING_LIST, null, values);
+		Log.i(this.getClass().toString(), "Item added to shopping Cart");
 	}
 
 

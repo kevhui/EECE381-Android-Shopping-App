@@ -18,14 +18,14 @@ public class DisplayCategories extends ListActivity {
 		super.onCreate(icicle);
 
 		
+		//Open database and query all the categories
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
 		List<String> categoryList = db.getAllCategories();
-		// Don't forget to close database connection
 		db.closeDB();
 
 
-		
+		//Display the categories on the list View
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 				R.layout.list_categories, R.id.categoryName, categoryList);
 
@@ -34,7 +34,10 @@ public class DisplayCategories extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-	    Intent intent = new Intent(this, DisplayItems.class);
+	    //TODO: change form making new activity to re-populating listView
+		
+		//Creates a new listView to displayed items 
+		Intent intent = new Intent(this, DisplayItems.class);
 	    String message = l.getItemAtPosition(position).toString();
 	    intent.putExtra("com.juan.shopping.CATEGORY", message);
 	    startActivity(intent);
