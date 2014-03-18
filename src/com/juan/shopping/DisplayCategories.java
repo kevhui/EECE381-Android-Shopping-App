@@ -16,7 +16,6 @@ public class DisplayCategories extends ListActivity {
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
-
 		
 		//Open database and query all the categories
 		StoreDatabaseHelper db;

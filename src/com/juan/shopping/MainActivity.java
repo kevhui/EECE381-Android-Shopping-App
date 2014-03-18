@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 		storedb = new StoreDatabaseHelper(getApplicationContext());
 		storedb.closeDB();
 		shoppingListdb = new ShoppingListDatabaseHelper(getApplicationContext());
-		shoppingListdb.closeDB();	
+		shoppingListdb.closeDB();
 	}
 	
 	public void onClickEditShoppingList(View view) {		

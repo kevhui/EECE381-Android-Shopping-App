@@ -76,6 +76,7 @@ public class DisplayItems extends ListActivity {
 		//Setup the number picker
 		np.setMinValue(0);
         np.setMaxValue(99);
+        np.setValue(1);
         np.setWrapSelectorWheel(false); 
 
         //Button add the item and quantity to the shopping cart
