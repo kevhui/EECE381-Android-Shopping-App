@@ -147,6 +147,7 @@ public class ConnectTCP extends Activity {
 		// The main parcel of work for this thread. Opens a socket
 		// to connect to the specified IP.
 
+		@Override
 		protected Socket doInBackground(Void... voids) {
 			Socket s = null;
 			String ip = getConnectToIP();
@@ -166,6 +167,7 @@ public class ConnectTCP extends Activity {
 		// automatically called, in the UI (main) thread to store
 		// the socket in this app's persistent storage
 
+		@Override
 		protected void onPostExecute(Socket s) {
 			MyApplication myApp = (MyApplication) ConnectTCP.this
 					.getApplication();
@@ -177,6 +179,7 @@ public class ConnectTCP extends Activity {
 	// on Timer Tasks before trying to understand this code.
 
 	public class TCPReadTimerTask extends TimerTask {
+		@Override
 		public void run() {
 			MyApplication app = (MyApplication) getApplication();
 			if (app.sock != null && app.sock.isConnected()
@@ -203,6 +206,7 @@ public class ConnectTCP extends Activity {
 						// using the UI thread.
 
 						runOnUiThread(new Runnable() {
+							@Override
 							public void run() {
 								EditText et = (EditText) findViewById(R.id.RecvdMessage);
 								et.setText(s);

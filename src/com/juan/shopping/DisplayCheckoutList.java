@@ -4,7 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,7 +31,7 @@ public class DisplayCheckoutList extends Activity{
 	        ListView list=(ListView)findViewById(R.id.LIST_OF_ITEMS);
 	        TextView tv=(TextView)findViewById(R.id.TOTAL_PRICE); 
 
-		tv.setText("TOTAL");
+	        tv.setText("TOTAL");
 
 			List<String> names = new ArrayList<String>();
 			
@@ -44,6 +50,13 @@ public class DisplayCheckoutList extends Activity{
 					R.layout.list_items, R.id.itemName, names);
 
 			list.setAdapter(adapter); 
+
 			
+			list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+	        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		                    view.setBackgroundColor(Color.GREEN);
+		            }
+	        });
 	}
 }
