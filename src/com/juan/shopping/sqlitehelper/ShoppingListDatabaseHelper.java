@@ -58,7 +58,6 @@ public class ShoppingListDatabaseHelper extends SQLiteOpenHelper {
 	//**************************************************************//
 	
 	// Adding an item
-		//TODO: Make it increment the quantity
 	public void addItem(String UPC, int quantity) {
 	
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -68,8 +67,22 @@ public class ShoppingListDatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_QUANTITY, quantity);
 
 		db.insert(TABLE_SHOPPING_LIST, null, values);
-		Log.i(this.getClass().toString(), "Item added to shopping Cart");
+		Log.i(this.getClass().toString(), "Item added to shopping list");
 	}
+	
+	// Update a row in the shopping list
+	public void updateItem(String UPC, int quantity) {
+
+	SQLiteDatabase db = this.getWritableDatabase();
+
+	ContentValues values = new ContentValues();
+
+	values.put(KEY_QUANTITY, quantity);
+
+	db.update(TABLE_SHOPPING_LIST, values, "upc = '" + UPC + "'", null);
+	//db.insert(TABLE_SHOPPING_LIST, null, values);
+	Log.i(this.getClass().toString(), "Item updated in shopping list");
+}
 
 
 	// query the whole shopping list

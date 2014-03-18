@@ -42,7 +42,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void onClickViewShoppingList(View view) {	
-	    Intent intent = new Intent(this, DisplayShoppingCart.class);
+	    Intent intent = new Intent(this, DisplayShoppingList.class);
 	    startActivity(intent);
 	}
 	
