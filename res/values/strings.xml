@@ -4,6 +4,7 @@
     <string name="app_name">Shop Number Juan</string>
     <string name="subtext">Theres only Juan place to go</string>
     <string name="action_settings">Settings</string>
+    <string name="action_search">Search</string>
     <string name="hello_world">Hello world!</string>
     <string name="add_item_name">Name of Item</string>
 

@@ -75,7 +75,9 @@ public class DisplayItems extends ListActivity {
 		Button btnDismiss = (Button) popupView.findViewById(R.id.bAddToCart);
 		TextView tv = (TextView) popupView.findViewById(R.id.tvItemNameAddItem);
 		
+		//Display the name of the item clicked
 		tv.setText(clickedItem.getName());
+		
 		//Setup the number picker
 		np.setMinValue(0);
         np.setMaxValue(99);
