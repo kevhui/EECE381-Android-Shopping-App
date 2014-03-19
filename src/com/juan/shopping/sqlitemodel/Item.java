@@ -5,7 +5,7 @@ public class Item {
 	String upc;
 	String name;
 	String description;
-	String price;
+	float price;
 	String category;
 
 	
@@ -52,11 +52,11 @@ public class Item {
 		this.description = description;
 	}
 
-	public String getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 

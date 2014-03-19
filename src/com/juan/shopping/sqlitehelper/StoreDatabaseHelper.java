@@ -139,7 +139,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
 		td.setUpc(c.getString(c.getColumnIndex(KEY_UPC)));
 		td.setName((c.getString(c.getColumnIndex(KEY_NAME))));
 		td.setDescription(c.getString(c.getColumnIndex(KEY_DESCRIPTION)));
-		td.setPrice(c.getString(c.getColumnIndex(KEY_PRICE)));
+		td.setPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)));
 		td.setCategory((c.getString(c.getColumnIndex(KEY_CATEGORY))));
 		
 		return td;
