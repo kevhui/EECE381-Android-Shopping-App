@@ -215,7 +215,7 @@ public class DisplayCheckoutList extends Activity{
 								totalPrice += db.getItem(s).getPrice();								
 								db.closeDB();
 								
-								list.setAdapter(adapter);
+								adapter.notifyDataSetChanged();
 								tv.setText(totalPrice);
 							}
 						});
