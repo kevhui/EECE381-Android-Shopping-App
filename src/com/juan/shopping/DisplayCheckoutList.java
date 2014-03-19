@@ -25,7 +25,7 @@ import com.juan.shopping.sqlitemodel.Item;
 
 public class DisplayCheckoutList extends Activity{
 	
-	private List<Item> checkoutList;
+	private List<Item> checkoutList; //make into historyItem later
 	private List<String> names;
 	ArrayAdapter<String> adapter;
 	private int totalPrice;
@@ -58,6 +58,7 @@ public class DisplayCheckoutList extends Activity{
         tv.setText("TOTAL");
 
 		adapter = new ArrayAdapter<String>(this, R.layout.list_items, R.id.itemName, names);
+		list.setAdapter(adapter);
 	}
 
 	// Route called when the user presses "connect"
