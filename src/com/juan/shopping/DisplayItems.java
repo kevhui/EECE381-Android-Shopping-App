@@ -119,8 +119,6 @@ public class DisplayItems extends ListActivity {
 
 		// Display the picture
 		int imageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + clickedItem.getUpc(), null,null);
-		Log.d("filepath","upc" + clickedItem.getUpc());
-		Log.d("filepath", "ID" + imageId);
 		iv.setImageResource(imageId);
 
 		// Button add the item and quantity to the shopping cart

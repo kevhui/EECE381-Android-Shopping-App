@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
@@ -79,8 +80,13 @@ public class DisplayShoppingList extends ListActivity {
 		
 		Button btnDismiss = (Button) popupView.findViewById(R.id.bSaveCartItem);
 		TextView tv = (TextView) popupView.findViewById(R.id.tvItemNameShoppingList);
+		ImageView iv = (ImageView) popupView.findViewById(R.id.ivItemImageShoppingList);
 		
 		tv.setText(names.get(position));
+		
+		// Display the picture
+		int imageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + clickedItem.getUPC(), null,null);
+		iv.setImageResource(imageId);
 		
 		// Setup the number picker
 		np.setMinValue(0);
