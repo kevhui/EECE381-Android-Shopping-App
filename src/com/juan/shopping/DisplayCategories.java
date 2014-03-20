@@ -7,13 +7,9 @@ import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class DisplayCategories extends ListActivity {
 
@@ -32,33 +28,6 @@ public class DisplayCategories extends ListActivity {
 				R.layout.list_categories, R.id.categoryName, categoryList);
 
 		setListAdapter(adapter);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle presses on the action bar items
-		Toast t;
-		switch (item.getItemId()) {
-		case R.id.action_search:
-			 t = Toast.makeText(getApplicationContext(), "Search", Toast.LENGTH_LONG);
-			t.show();
-			return true;
-		case R.id.action_settings:
-			t = Toast.makeText(getApplicationContext(), "Settings", Toast.LENGTH_LONG);
-			t.show();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu items for use in the action bar
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override

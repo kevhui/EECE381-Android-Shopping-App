@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".DisplayCategories"
-            android:label="@string/app_name"
+            android:label="@string/sDisplayCategories"
             android:parentActivityName=".MainActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -37,7 +37,7 @@
         </activity>
         <activity
             android:name=".DisplayShoppingList"
-            android:label="@string/app_name"
+            android:label="@string/sDisplayShoppingList"
             android:parentActivityName=".MainActivity" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -77,7 +77,7 @@
         </activity>
         <activity
             android:name=".DisplayItems"
-            android:label="@string/app_name"
+            android:label="@string/sDisplayItems"
             android:parentActivityName=".DisplayCategories" >
 
             <!-- Parent activity meta-data to support 4.0 and lower -->
