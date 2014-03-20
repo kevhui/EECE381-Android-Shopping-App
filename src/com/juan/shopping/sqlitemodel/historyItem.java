@@ -5,7 +5,7 @@ import java.sql.Date;
 public class historyItem {
 
 
-	String name;
+	String upc;
 	float price;
 	int quantity;
 	Date date;
@@ -14,21 +14,23 @@ public class historyItem {
 	//TODO: dont think i need the constructors anymore
 	
 	// constructors
-
-	public historyItem(String name, float price, Date date) {
-		this.name = name;
+	public historyItem(){
+	}
+	
+	public historyItem(String upc, float price, Date date) {
+		this.upc = upc;
 		this.price = price;
 		this.date = date;
 	}
 	
 	//Getters and Setters
 
-	public String getName() {
-		return name;
+	public String getUPC() {
+		return upc;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(String upc) {
+		this.upc = upc;
 	}
 
 	public Date getDate() {

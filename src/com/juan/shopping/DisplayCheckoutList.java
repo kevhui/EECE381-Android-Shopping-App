@@ -51,7 +51,7 @@ public class DisplayCheckoutList extends Activity{
 		Timer tcp_timer = new Timer();
 		tcp_timer.schedule(tcp_task, 3000, 500);
 		
-		
+		names = new ArrayList<String>();
 		list=(ListView)findViewById(R.id.LIST_OF_ITEMS);
         tv=(TextView)findViewById(R.id.TOTAL_PRICE); 
         tv.setText("TOTAL");
