@@ -9,76 +9,71 @@
     tools:context=".MainActivity" >
 
     <TextView
+        android:id="@+id/title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:text="@string/app_name"
+        android:textSize="30dp" />
+
+    <TextView
         android:id="@+id/subtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/title"
+        android:layout_below="@id/title"
         android:layout_centerHorizontal="true"
         android:text="@string/subtext"
         android:textSize="15dp" />
 
     <Button
-        android:id="@+id/bViewShoppingList"
-        android:layout_width="wrap_content"
+        android:id="@+id/bEditShoppingList"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/bEditShoppingList"
-        android:layout_below="@+id/bEditShoppingList"
+        android:layout_below="@id/subtext"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:onClick="onClickEditShoppingList"
+        android:text="Edit Shopping List" />
+
+    <Button
+        android:id="@+id/bViewShoppingList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bEditShoppingList"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:onClick="onClickViewShoppingList"
         android:text="View Shopping List" />
 
     <Button
         android:id="@+id/bCheckoutList"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bViewShoppingList"
+        android:layout_below="@id/bViewShoppingList"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:onClick="onClickCheckoutList"
         android:text="Checkout List" />
 
     <Button
-        android:id="@+id/bHistory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/bCheckoutList"
-        android:layout_centerHorizontal="true"
-        android:onClick="onClickHistory"
-        android:text="History" />
-
-    <Button
         android:id="@+id/bScanBarcode"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bCheckoutList"
-        android:layout_below="@+id/bHistory"
+        android:layout_below="@id/bCheckoutList"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:onClick="onClickBarcodeScanner"
         android:text="Scan Barcode" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="47dp"
-        android:text="@string/app_name"
-        android:textSize="30dp" />
-
-    <Button
-        android:id="@+id/bEditShoppingList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ConnectToDE2"
-        android:layout_centerHorizontal="true"
-        android:onClick="onClickEditShoppingList"
-        android:text="Edit Shopping List" />
-
     <Button
         android:id="@+id/ConnectToDE2"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/bScanBarcode"
-        android:layout_below="@+id/subtext"
-        android:layout_marginTop="32dp"
+        android:layout_below="@+id/bScanBarcode"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:onClick="onClickConnectToDE2"
         android:text="Connect2DE2" />
 
