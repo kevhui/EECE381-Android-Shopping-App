@@ -45,7 +45,8 @@
 	        android:layout_height="wrap_content"
 	        android:textSize="30sp"
 	        android:text="Checkout"
-	        android:layout_marginRight="10dp"/>
+	        android:layout_marginRight="10dp"
+	        android:onClick="sendMessage"/>
 	</LinearLayout>
  
 </RelativeLayout>

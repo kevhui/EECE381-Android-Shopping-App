@@ -13,31 +13,45 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 
-public class DisplayCheckoutList extends Activity{
-	
-	private List<Item> checkoutList; //make into historyItem later
+//Change the hard coded ip adress
+//Connect to middleman via option 3 (android->android)
+//Press the checkout button
+//Once the above works merge onto master
+//change the onClick in the checkout_list.xml from sendMessage to w/e
+//Note: I'm not sure if the barcodes that i printed (that brittaney has)
+// are still in the database and the app crashes if you query something 
+// that is not in the database, Brittaney can make new barcodes with the following
+//073141551342
+//058807415817
+//678523080016
+//058807414025
+//http://www.barcoding.com/upc/#.UyqvFvldVOc
+//select UPC A -> copy to word -> resize and print
+
+public class DisplayCheckoutList extends Activity {
+
+	private List<Item> checkoutList; // make into historyItem later
 	private List<String> names;
 	ArrayAdapter<String> adapter;
-	private int totalPrice;
+	private double totalPrice;
 	ListView list;
 	TextView tv;
 
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		// This call will result in better error messages if you
 		// try to do things in the wrong thread.
-		
+
 		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
 				.detectDiskReads().detectDiskWrites().detectNetwork()
 				.penaltyLog().build());
@@ -50,19 +64,24 @@ public class DisplayCheckoutList extends Activity{
 		TCPReadTimerTask tcp_task = new TCPReadTimerTask();
 		Timer tcp_timer = new Timer();
 		tcp_timer.schedule(tcp_task, 3000, 500);
-		
-		names = new ArrayList<String>();
-		list=(ListView)findViewById(R.id.LIST_OF_ITEMS);
-        tv=(TextView)findViewById(R.id.TOTAL_PRICE); 
-        tv.setText("TOTAL");
 
-		adapter = new ArrayAdapter<String>(this, R.layout.list_items, R.id.itemName, names);
+		checkoutList = new ArrayList<Item>();
+		names = new ArrayList<String>();
+		list = (ListView) findViewById(R.id.LIST_OF_ITEMS);
+		tv = (TextView) findViewById(R.id.TOTAL_PRICE);
+		tv.setText("TOTAL");
+
+		adapter = new ArrayAdapter<String>(this, R.layout.list_items,
+				R.id.itemName, names);
 		list.setAdapter(adapter);
+
+		openSocket();
+		// sendMessage();
 	}
 
 	// Route called when the user presses "connect"
 
-	public void openSocket(View view) {
+	public void openSocket() {
 		MyApplication app = (MyApplication) getApplication();
 
 		// Make sure the socket is not already opened
@@ -85,16 +104,30 @@ public class DisplayCheckoutList extends Activity{
 
 		// Get the message from the box
 
-		EditText et = (EditText) findViewById(R.id.MessageText);
-		String msg = et.getText().toString();
-
+		//EditText et = (EditText) findViewById(R.id.MessageText);
+		//String msg = et.getText().toString();
+		Log.d("Debug","Send message");
+		int i = (int)((Math.random()*100)%4);
+		String msg;
+		
+		if ( i == 0){
+		msg = "073141551342";
+		}
+		else if ( i == 1){
+		msg = "678523080016";
+		}
+		else if ( i == 2){
+		msg = "058807415817";
+		}
+		else{
+		msg = "058807414025";
+		}
+		
 		// Create an array of bytes. First byte will be the
 		// message length, and the next ones will be the message
-
 		byte buf[] = new byte[msg.length() + 1];
 		buf[0] = (byte) msg.length();
 		System.arraycopy(msg.getBytes(), 0, buf, 1, msg.length());
-
 		// Now send through the output stream of the socket
 
 		OutputStream out;
@@ -103,9 +136,11 @@ public class DisplayCheckoutList extends Activity{
 			try {
 				out.write(buf, 0, msg.length() + 1);
 			} catch (IOException e) {
+				Log.d("DEBUG", "error");
 				e.printStackTrace();
 			}
 		} catch (IOException e) {
+			Log.d("DEBUG", "error");
 			e.printStackTrace();
 		}
 	}
@@ -126,7 +161,7 @@ public class DisplayCheckoutList extends Activity{
 	// Construct an IP address from the four boxes
 
 	public String getConnectToIP() {
-		String ip = "192.168.1.100";
+		String ip = "192.168.0.105";
 		return ip;
 	}
 
@@ -193,7 +228,7 @@ public class DisplayCheckoutList extends Activity{
 					int bytes_avail = in.available();
 					if (bytes_avail > 0) {
 
-						// If so, read them in and create a st	ring
+						// If so, read them in and create a st ring
 
 						byte buf[] = new byte[bytes_avail];
 						in.read(buf);
@@ -208,14 +243,23 @@ public class DisplayCheckoutList extends Activity{
 						runOnUiThread(new Runnable() {
 							@Override
 							public void run() {
-								StoreDatabaseHelper db = new StoreDatabaseHelper(getApplicationContext());
-								checkoutList.add(db.getItem(s));
-								names.add(db.getItem(s).getName());
-								totalPrice += db.getItem(s).getPrice();								
-								db.closeDB();
-								
-								adapter.notifyDataSetChanged();
-								tv.setText(totalPrice);
+								Log.d("Debug", s);
+
+								String upc = s.substring(1);
+								if (upc.length() == 12) {
+
+									StoreDatabaseHelper db = new StoreDatabaseHelper(
+											getApplicationContext());
+									Item i = db.getItem(upc);
+									db.closeDB();
+									checkoutList.add(i);
+									names.add(i.getName());
+									totalPrice += i.getPrice();
+
+									adapter.notifyDataSetChanged();
+									tv.setText("$"
+											+ String.format("%.2f", totalPrice));
+								}
 							}
 						});
 
@@ -225,5 +269,5 @@ public class DisplayCheckoutList extends Activity{
 				}
 			}
 		}
-	}	
+	}
 }

@@ -11,7 +11,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.juan.shopping.sqlitemodel.Shopping_list_item;
 import com.juan.shopping.sqlitemodel.historyItem;
 
 public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
