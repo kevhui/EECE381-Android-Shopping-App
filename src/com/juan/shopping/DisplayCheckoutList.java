@@ -148,10 +148,20 @@ public class DisplayCheckoutList extends Activity {
 //			Log.d("DEBUG", "error");
 //			e.printStackTrace();
 //		}
+		
+		CheckoutListDatabaseHelper db = new CheckoutListDatabaseHelper(getApplicationContext());;
+		for (historyItem item : checkoutList) {
+			db.addItem(item);
+		}
+		db.closeDB();
+		
+		totalPrice = 0;
+		tv.setText("$" + String.format("%.2f", totalPrice));
+		names.clear();
+		adapter.notifyDataSetChanged();
 	}
 
 	// Called when the user closes a socket
-
 	public void closeSocket(View view) {
 		MyApplication app = (MyApplication) getApplication();
 		Socket s = app.sock;
@@ -279,8 +289,7 @@ public class DisplayCheckoutList extends Activity {
 									totalPrice += i.getPrice();
 
 									adapter.notifyDataSetChanged();
-									tv.setText("$"
-											+ String.format("%.2f", totalPrice));
+									tv.setText("$" + String.format("%.2f", totalPrice));
 								}
 							}
 						});

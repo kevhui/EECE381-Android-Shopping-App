@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+
+import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 
@@ -13,6 +15,7 @@ public class MainActivity extends Activity {
 	// Database Helper
 	StoreDatabaseHelper storedb;
 	ShoppingListDatabaseHelper shoppingListdb;
+	CheckoutListDatabaseHelper historydb;
 	public SQLiteDatabase database;
 
 	@Override
@@ -25,6 +28,8 @@ public class MainActivity extends Activity {
 		storedb.closeDB();
 		shoppingListdb = new ShoppingListDatabaseHelper(getApplicationContext());
 		shoppingListdb.closeDB();
+		historydb = new CheckoutListDatabaseHelper(getApplicationContext());
+		storedb.closeDB();
 	}
 
 
@@ -40,6 +45,11 @@ public class MainActivity extends Activity {
 
 	public void onClickCheckoutList(View view) {
 		Intent intent = new Intent(this, DisplayCheckoutList.class);
+		startActivity(intent);
+	}
+	
+	public void onClickHistory(View view) {
+		Intent intent = new Intent(this, DisplayHistory.class);
 		startActivity(intent);
 	}
 

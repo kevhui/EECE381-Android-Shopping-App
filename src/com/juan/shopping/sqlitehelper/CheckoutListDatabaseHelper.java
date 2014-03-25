@@ -62,19 +62,17 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 	 //***************** Shopping List table methods ****************//
 	//**************************************************************//
 	
-	// Adding an item
-	public void addItem(String UPC, int quantity, float price, String date) {
-	
+	// Add an item
+	public void addItem(historyItem item) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_UPC, UPC);
-		values.put(KEY_QUANTITY, quantity);
-		values.put(KEY_PRICE, price);
-		values.put(KEY_DATE, date);
+		values.put(KEY_UPC, item.getUPC());
+		values.put(KEY_QUANTITY, item.getQuantity());
+		values.put(KEY_PRICE, item.getPrice());
+		values.put(KEY_DATE, item.getDate());
 
 		db.insert(TABLE_CHECKOUT_LIST, null, values);
-		Log.i(this.getClass().toString(), "Item added to checkout list");
 	}
 	
 	// Update a row in the shopping list
