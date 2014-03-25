@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,8 +21,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
+import com.juan.shopping.sqlitemodel.Shopping_list_item;
+import com.juan.shopping.sqlitemodel.historyItem;
 
 //Change the hard coded ip adress
 //Connect to middleman via option 3 (android->android)
@@ -39,7 +44,7 @@ import com.juan.shopping.sqlitemodel.Item;
 
 public class DisplayCheckoutList extends Activity {
 
-	private List<Item> checkoutList; // make into historyItem later
+	public List<historyItem> checkoutList; // make into historyItem later
 	private List<String> names;
 	ArrayAdapter<String> adapter;
 	private double totalPrice;
@@ -65,7 +70,7 @@ public class DisplayCheckoutList extends Activity {
 		Timer tcp_timer = new Timer();
 		tcp_timer.schedule(tcp_task, 3000, 500);
 
-		checkoutList = new ArrayList<Item>();
+		checkoutList = new ArrayList<historyItem>();
 		names = new ArrayList<String>();
 		list = (ListView) findViewById(R.id.LIST_OF_ITEMS);
 		tv = (TextView) findViewById(R.id.TOTAL_PRICE);
@@ -100,49 +105,49 @@ public class DisplayCheckoutList extends Activity {
 	// Called when the user wants to send a message
 
 	public void sendMessage(View view) {
-		MyApplication app = (MyApplication) getApplication();
-
-		// Get the message from the box
-
-		//EditText et = (EditText) findViewById(R.id.MessageText);
-		//String msg = et.getText().toString();
-		Log.d("Debug","Send message");
-		int i = (int)((Math.random()*100)%4);
-		String msg;
-		
-		if ( i == 0){
-		msg = "073141551342";
-		}
-		else if ( i == 1){
-		msg = "678523080016";
-		}
-		else if ( i == 2){
-		msg = "058807415817";
-		}
-		else{
-		msg = "058807414025";
-		}
-		
-		// Create an array of bytes. First byte will be the
-		// message length, and the next ones will be the message
-		byte buf[] = new byte[msg.length() + 1];
-		buf[0] = (byte) msg.length();
-		System.arraycopy(msg.getBytes(), 0, buf, 1, msg.length());
-		// Now send through the output stream of the socket
-
-		OutputStream out;
-		try {
-			out = app.sock.getOutputStream();
-			try {
-				out.write(buf, 0, msg.length() + 1);
-			} catch (IOException e) {
-				Log.d("DEBUG", "error");
-				e.printStackTrace();
-			}
-		} catch (IOException e) {
-			Log.d("DEBUG", "error");
-			e.printStackTrace();
-		}
+//		MyApplication app = (MyApplication) getApplication();
+//
+//		// Get the message from the box
+//
+//		//EditText et = (EditText) findViewById(R.id.MessageText);
+//		//String msg = et.getText().toString();
+//		Log.d("Debug","Send message");
+//		int i = (int)((Math.random()*100)%4);
+//		String msg;
+//		
+//		if ( i == 0){
+//		msg = "073141551342";
+//		}
+//		else if ( i == 1){
+//		msg = "678523080016";
+//		}
+//		else if ( i == 2){
+//		msg = "058807415817";
+//		}
+//		else{
+//		msg = "058807414025";
+//		}
+//		
+//		// Create an array of bytes. First byte will be the
+//		// message length, and the next ones will be the message
+//		byte buf[] = new byte[msg.length() + 1];
+//		buf[0] = (byte) msg.length();
+//		System.arraycopy(msg.getBytes(), 0, buf, 1, msg.length());
+//		// Now send through the output stream of the socket
+//
+//		OutputStream out;
+//		try {
+//			out = app.sock.getOutputStream();
+//			try {
+//				out.write(buf, 0, msg.length() + 1);
+//			} catch (IOException e) {
+//				Log.d("DEBUG", "error");
+//				e.printStackTrace();
+//			}
+//		} catch (IOException e) {
+//			Log.d("DEBUG", "error");
+//			e.printStackTrace();
+//		}
 	}
 
 	// Called when the user closes a socket
@@ -161,7 +166,7 @@ public class DisplayCheckoutList extends Activity {
 	// Construct an IP address from the four boxes
 
 	public String getConnectToIP() {
-		String ip = "192.168.0.105";
+		String ip = "128.189.221.246";
 		return ip;
 	}
 
@@ -247,12 +252,29 @@ public class DisplayCheckoutList extends Activity {
 
 								String upc = s.substring(1);
 								if (upc.length() == 12) {
+									
+									String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 
 									StoreDatabaseHelper db = new StoreDatabaseHelper(
 											getApplicationContext());
 									Item i = db.getItem(upc);
 									db.closeDB();
-									checkoutList.add(i);
+									
+									historyItem hi = new historyItem();
+									for (historyItem item : checkoutList) {
+										if(item.getUPC() == s){
+											hi.addQuantity(1);
+											totalPrice += i.getPrice();
+											tv.setText("$"
+													+ String.format("%.2f", totalPrice));
+											return;
+										}
+										else
+											hi = new historyItem(s, i.getPrice(), currentDate, 1);
+											break;
+									}
+									checkoutList.add(hi);
+									
 									names.add(i.getName());
 									totalPrice += i.getPrice();
 

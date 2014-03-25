@@ -1,6 +1,7 @@
 package com.juan.shopping.sqlitehelper;
 
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.historyItem;
 
 public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
@@ -36,7 +38,7 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 	// Item table create statement
 	private static final String CREATE_TABLE_CHECKOUT_LIST = "CREATE TABLE "
 			+ TABLE_CHECKOUT_LIST + "(" + KEY_UPC + " TEXT PRIMARY KEY,"
-			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " BLOB" + ")";
+			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " TEXT" + ")";
 	
 	public CheckoutListDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -61,32 +63,53 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 	//**************************************************************//
 	
 	// Adding an item
-	public void addItem(String UPC, int quantity) {
+	public void addItem(String UPC, int quantity, float price, String date) {
 	
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_UPC, UPC);
 		values.put(KEY_QUANTITY, quantity);
+		values.put(KEY_PRICE, price);
+		values.put(KEY_DATE, date);
 
 		db.insert(TABLE_CHECKOUT_LIST, null, values);
-		Log.i(this.getClass().toString(), "Item added to shopping list");
+		Log.i(this.getClass().toString(), "Item added to checkout list");
 	}
 	
 	// Update a row in the shopping list
-	public void updateItem(String UPC, int quantity) {
+	public void updateItem(historyItem item) {
 
 	SQLiteDatabase db = this.getWritableDatabase();
 
 	ContentValues values = new ContentValues();
+	values.put(KEY_UPC, item.getUPC());
+	values.put(KEY_QUANTITY, item.getQuantity());
+	values.put(KEY_PRICE, item.getPrice());
+	values.put(KEY_DATE, item.getDate());
 
-	values.put(KEY_QUANTITY, quantity);
-
-	db.update(TABLE_CHECKOUT_LIST, values, "upc = '" + UPC + "'", null);
+	db.update(TABLE_CHECKOUT_LIST, values, KEY_UPC + " = ?",
+			new String[] { String.valueOf(item.getUPC()) });
 	//db.insert(TABLE_SHOPPING_LIST, null, values);
 	Log.i(this.getClass().toString(), "Item updated in shopping list");
 }
 
+	// query a single item
+//	public Item checkItemExists(String upc) {
+//		SQLiteDatabase db = this.getReadableDatabase();
+//
+//		String selectQuery = "SELECT  * FROM " + TABLE_CHECKOUT_LIST + " WHERE "
+//				+ KEY_UPC + " = " + "'" + upc + "'";
+//
+//		Log.e(LOG, selectQuery);
+//
+//		Cursor c = db.rawQuery(selectQuery, null);
+//
+//		if (c != null)
+//			c.moveToFirst();
+//		//c.get
+//		
+//	}
 
 	// query the whole shopping list
 	public List<historyItem> getAllItems() {

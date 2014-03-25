@@ -8,7 +8,7 @@ public class historyItem {
 	String upc;
 	float price;
 	int quantity;
-	Date date;
+	String date;
 
 	
 	//TODO: dont think i need the constructors anymore
@@ -17,10 +17,17 @@ public class historyItem {
 	public historyItem(){
 	}
 	
-	public historyItem(String upc, float price, Date date) {
+	public historyItem(String upc, float price, String date) {
 		this.upc = upc;
 		this.price = price;
 		this.date = date;
+	}
+	
+	public historyItem(String upc, float price, String date, int quantity) {
+		this.upc = upc;
+		this.price = price;
+		this.date = date;
+		this.quantity = quantity;
 	}
 	
 	//Getters and Setters
@@ -33,11 +40,11 @@ public class historyItem {
 		this.upc = upc;
 	}
 
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 	
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -47,6 +54,10 @@ public class historyItem {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	
+	public void addQuantity(int quantity) {
+		this.quantity += quantity;
 	}
 	
 	public float getPrice() {
