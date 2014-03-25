@@ -10,5 +10,9 @@
     <string name="sDisplayItems">category</string>
     <string name="sDisplayShoppingList">Shopping List</string>
     <string name="add_item_name">item</string>
+    <string name="checkout_name">name</string>
+    <string name="checkout_quantity">quantity</string>
+    <string name="checkout_price">price</string>
+    <string name="checkout_date">date</string>
 
 </resources>

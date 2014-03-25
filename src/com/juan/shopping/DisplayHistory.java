@@ -21,17 +21,20 @@ import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.Shopping_list_item;
+import com.juan.shopping.sqlitemodel.historyItem;
 
 public class DisplayHistory extends ListActivity {
-	private List<Shopping_list_item> shoppingList;
+	private List<historyItem> checkoutList;
 	private List<String> names;
-	private Shopping_list_item clickedItem;
-	private NumberPicker np;
-	private int clickedItemPosition;
+	private List<Integer> quantity;
+	private List<Float> price;
+	private List<String> date;
+	private historyItem clickedItem;
 	private ArrayAdapter<String> adapter;
 	
 	@Override
@@ -40,32 +43,34 @@ public class DisplayHistory extends ListActivity {
 
 		names = new ArrayList<String>();
 
-		ShoppingListDatabaseHelper db;
-		db = new ShoppingListDatabaseHelper(getApplicationContext());
-		shoppingList = db.getAllItems();
+		CheckoutListDatabaseHelper db;
+		db = new CheckoutListDatabaseHelper(getApplicationContext());
+		checkoutList = db.getAllItems();
 		db.closeDB();
 
 		StoreDatabaseHelper storeDb = new StoreDatabaseHelper(
 				getApplicationContext());
-		for (Shopping_list_item item : shoppingList) {
+		for (historyItem item : checkoutList) {
 			// Add to a list to display
 			Item storeItem = storeDb.getItem(item.getUPC());
 			names.add(storeItem.getName());
+			quantity.add(item.getQuantity());
+			price.add(item.getPrice());
+			date.add(item.getDate());
 		}
 		storeDb.closeDB();
 		adapter = new ArrayAdapter<String>(this,
-				R.layout.shopping_list, R.id.itemName, names);
+				R.layout.history, R.id.itemName, names);
 
 		setListAdapter(adapter);
 	}
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		clickedItem = shoppingList.get(position);
-		clickedItemPosition = position;
+		clickedItem = checkoutList.get(position);
 
 		Log.i(this.getClass().toString(),
-				"Item UPC: " + shoppingList.get(position).getUPC()
+				"Item UPC: " + checkoutList.get(position).getUPC()
 						+ " was clicked");
 
 		LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
@@ -76,48 +81,21 @@ public class DisplayHistory extends ListActivity {
 				null);
 		final PopupWindow popupWindow = new PopupWindow(popupView,
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		np = (NumberPicker) popupView.findViewById(R.id.npNumberItemsShoppingList);
 		
-		Button btnDismiss = (Button) popupView.findViewById(R.id.bSaveCartItem);
-		TextView tv = (TextView) popupView.findViewById(R.id.tvItemNameShoppingList);
-		ImageView iv = (ImageView) popupView.findViewById(R.id.ivItemImageShoppingList);
+		TextView tvN = (TextView) popupView.findViewById(R.id.tvItemNameCheckoutList);
+		TextView tvQ = (TextView) popupView.findViewById(R.id.tvItemQuantityCheckoutList);
+		TextView tvP = (TextView) popupView.findViewById(R.id.tvItemPriceCheckoutList);
+		TextView tvD = (TextView) popupView.findViewById(R.id.tvItemDateCheckoutList);
+		ImageView iv = (ImageView) popupView.findViewById(R.id.ivItemImageCheckoutList);
 		
-		tv.setText(names.get(position));
+		tvN.setText(names.get(position));
+		tvQ.setText(quantity.get(position));
+		tvP.setText("$" + String.format("%.2f", price.get(position).toString()));
+		tvD.setText(date.get(position));
 		
 		// Display the picture
 		int imageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + clickedItem.getUPC(), null,null);
 		iv.setImageResource(imageId);
-		
-		// Setup the number picker
-		np.setMinValue(0);
-		np.setMaxValue(99);
-		np.setValue(clickedItem.getQuantity());
-		np.setWrapSelectorWheel(false);
-
-		// Button add the item and quantity to the shopping cart
-		btnDismiss.setOnClickListener(new Button.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-
-				Log.i(this.getClass().toString(),
-						"Item UPC: " + clickedItem.getUPC()
-								+ " was updated in shopping list");
-				ShoppingListDatabaseHelper db = new ShoppingListDatabaseHelper(
-						getApplicationContext());
-				if (np.getValue() == 0) {
-					db.deleteItem(clickedItem.getUPC());
-					shoppingList.remove(clickedItemPosition);
-					names.remove(clickedItemPosition);
-					adapter.notifyDataSetChanged();
-				} else {
-					db.updateItem(clickedItem.getUPC(), np.getValue());
-					shoppingList.get(clickedItemPosition).setQuantity(
-							np.getValue());
-				}
-				db.closeDB();
-				popupWindow.dismiss();
-			}
-		});
 
 		// Disable background clicking
 		popupWindow.setFocusable(true);
