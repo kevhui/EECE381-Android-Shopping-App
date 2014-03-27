@@ -14,27 +14,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
+import com.juan.shopping.sqlitemodel.HistoryItem;
 import com.juan.shopping.sqlitemodel.Item;
-import com.juan.shopping.sqlitemodel.Shopping_list_item;
-import com.juan.shopping.sqlitemodel.historyItem;
 
 public class DisplayHistory extends ListActivity {
-	private List<historyItem> checkoutList;
+	private List<HistoryItem> checkoutList;
 	private List<String> names;
-	private List<Integer> quantity;
-	private List<Float> price;
-	private List<String> date;
-	private historyItem clickedItem;
+	private HistoryItem clickedItem;
 	private ArrayAdapter<String> adapter;
 	
 	@Override
@@ -52,13 +45,12 @@ public class DisplayHistory extends ListActivity {
 
 		StoreDatabaseHelper storeDb = new StoreDatabaseHelper(
 				getApplicationContext());
-		for (historyItem item : checkoutList) {
+		
+
+		for (HistoryItem item : checkoutList) {
 			// Add to a list to display
 			Item storeItem = storeDb.getItem(item.getUPC());
 			names.add(storeItem.getName());
-			quantity.add(item.getQuantity());
-			price.add(item.getPrice());
-			date.add(item.getDate());
 		}
 		storeDb.closeDB();
 		adapter = new ArrayAdapter<String>(this,
@@ -71,7 +63,7 @@ public class DisplayHistory extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		clickedItem = checkoutList.get(position);
 
-		Log.i(this.getClass().toString(),
+		Log.i("DisplayHistory",
 				"Item UPC: " + checkoutList.get(position).getUPC()
 						+ " was clicked");
 
@@ -79,22 +71,28 @@ public class DisplayHistory extends ListActivity {
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
 
 		// Setup the popupView
-		View popupView = layoutInflater.inflate(R.layout.popup_shopping_list,
+		View popupView = layoutInflater.inflate(R.layout.popup_history,
 				null);
 		final PopupWindow popupWindow = new PopupWindow(popupView,
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		
+		Log.d("DisplayHistory",
+				"views");
 		TextView tvN = (TextView) popupView.findViewById(R.id.tvItemNameCheckoutList);
 		TextView tvQ = (TextView) popupView.findViewById(R.id.tvItemQuantityCheckoutList);
 		TextView tvP = (TextView) popupView.findViewById(R.id.tvItemPriceCheckoutList);
 		TextView tvD = (TextView) popupView.findViewById(R.id.tvItemDateCheckoutList);
 		ImageView iv = (ImageView) popupView.findViewById(R.id.ivItemImageCheckoutList);
 		
+		Log.d("DisplayHistory",
+				"setViews");
 		tvN.setText(names.get(position));
-		tvQ.setText(quantity.get(position));
-		tvP.setText("$" + String.format("%.2f", price.get(position).toString()));
-		tvD.setText(date.get(position));
+		tvQ.setText(Integer.toString(checkoutList.get(position).getQuantity()));
+		tvP.setText("$" + String.format("%.2f", checkoutList.get(position).getPrice()));
+		tvD.setText(checkoutList.get(position).getDate());
 		
+		Log.d("DisplayHistory",
+				"display pic");
 		// Display the picture
 		int imageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + clickedItem.getUPC(), null,null);
 		iv.setImageResource(imageId);

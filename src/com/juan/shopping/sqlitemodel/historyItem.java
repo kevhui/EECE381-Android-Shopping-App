@@ -1,8 +1,7 @@
 package com.juan.shopping.sqlitemodel;
 
-import java.sql.Date;
 
-public class historyItem {
+public class HistoryItem {
 
 
 	String upc;
@@ -14,16 +13,16 @@ public class historyItem {
 	//TODO: dont think i need the constructors anymore
 	
 	// constructors
-	public historyItem(){
+	public HistoryItem(){
 	}
 	
-	public historyItem(String upc, float price, String date) {
+	public HistoryItem(String upc, float price, String date) {
 		this.upc = upc;
 		this.price = price;
 		this.date = date;
 	}
 	
-	public historyItem(String upc, float price, String date, int quantity) {
+	public HistoryItem(String upc, float price, String date, int quantity) {
 		this.upc = upc;
 		this.price = price;
 		this.date = date;
@@ -36,7 +35,7 @@ public class historyItem {
 		return upc;
 	}
 
-	public void setName(String upc) {
+	public void setUPC(String upc) {
 		this.upc = upc;
 	}
 

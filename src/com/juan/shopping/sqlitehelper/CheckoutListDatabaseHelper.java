@@ -1,7 +1,6 @@
 package com.juan.shopping.sqlitehelper;
 
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.juan.shopping.sqlitemodel.Item;
-import com.juan.shopping.sqlitemodel.historyItem;
+import com.juan.shopping.sqlitemodel.HistoryItem;
 
 public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
@@ -63,7 +61,7 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 	//**************************************************************//
 	
 	// Add an item
-	public void addItem(historyItem item) {
+	public void addItem(HistoryItem item) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -76,7 +74,7 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 	}
 	
 	// Update a row in the shopping list
-	public void updateItem(historyItem item) {
+	public void updateItem(HistoryItem item) {
 
 	SQLiteDatabase db = this.getWritableDatabase();
 
@@ -110,8 +108,8 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 //	}
 
 	// query the whole shopping list
-	public List<historyItem> getAllItems() {
-		List<historyItem> checkoutList = new ArrayList<historyItem>();
+	public List<HistoryItem> getAllItems() {
+		List<HistoryItem> checkoutList = new ArrayList<HistoryItem>();
 
 		String selectQuery = "SELECT  * FROM " + TABLE_CHECKOUT_LIST;
 
@@ -123,8 +121,11 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		// loop through all rows and add to list
 		if (c.moveToFirst()) {
 			do {
-				historyItem item = new historyItem();
+				HistoryItem item = new HistoryItem();
 				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
+				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				item.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+				item.setPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)));
 				// adding item to list
 				checkoutList.add(item);
 			} while (c.moveToNext());

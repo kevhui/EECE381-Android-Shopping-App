@@ -2,7 +2,6 @@ package com.juan.shopping;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -24,13 +23,12 @@ import android.widget.TextView;
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
-import com.juan.shopping.sqlitemodel.Shopping_list_item;
-import com.juan.shopping.sqlitemodel.historyItem;
+import com.juan.shopping.sqlitemodel.HistoryItem;
 
 
 public class DisplayCheckoutList extends Activity {
 
-	public List<historyItem> checkoutList;
+	public List<HistoryItem> checkoutList;
 	private List<String> names;
 	ArrayAdapter<String> adapter;
 	private double totalPrice;
@@ -56,7 +54,7 @@ public class DisplayCheckoutList extends Activity {
 		Timer tcp_timer = new Timer();
 		tcp_timer.schedule(tcp_task, 3000, 500);
 
-		checkoutList = new ArrayList<historyItem>();
+		checkoutList = new ArrayList<HistoryItem>();
 		names = new ArrayList<String>();
 		list = (ListView) findViewById(R.id.LIST_OF_ITEMS);
 		tv = (TextView) findViewById(R.id.TOTAL_PRICE);
@@ -92,11 +90,12 @@ public class DisplayCheckoutList extends Activity {
 
 	public void sendMessage(View view) {
 		
-		CheckoutListDatabaseHelper db = new CheckoutListDatabaseHelper(getApplicationContext());;
-		for (historyItem item : checkoutList) {
-			db.addItem(item);
+		CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());;
+		for (HistoryItem item : checkoutList) {
+			cdb.addItem(item);
+			Log.d("Debug","upc = " + item.getUPC());
 		}
-		db.closeDB();
+		cdb.closeDB();
 		
 		totalPrice = 0;
 		tv.setText("$" + String.format("%.2f", totalPrice));
@@ -213,26 +212,16 @@ public class DisplayCheckoutList extends Activity {
 									Item i = db.getItem(upc);
 									db.closeDB();
 									
-									historyItem hi = new historyItem();
-									for (historyItem item : checkoutList) {
-										if(item.getUPC() == s){
-											hi.addQuantity(1);
-											totalPrice += i.getPrice();
-											tv.setText("$"
-													+ String.format("%.2f", totalPrice));
-											return;
-										}
-										else
-											hi = new historyItem(s, i.getPrice(), currentDate, 1);
-											break;
+									if (itemExists(upc)){
 									}
-									checkoutList.add(hi);
-									
-									names.add(i.getName());
+									else {
+										HistoryItem hi = new HistoryItem(upc, i.getPrice(), currentDate, 1);
+										checkoutList.add(hi);
+										names.add(i.getName());
+									}
 									totalPrice += i.getPrice();
-
-									adapter.notifyDataSetChanged();
 									tv.setText("$" + String.format("%.2f", totalPrice));
+									adapter.notifyDataSetChanged();
 								}
 							}
 						});
@@ -271,31 +260,29 @@ public class DisplayCheckoutList extends Activity {
 
 		StoreDatabaseHelper db = new StoreDatabaseHelper(
 				getApplicationContext());
-		Item currentItem = db.getItem(upc);
+		Item i1 = db.getItem(upc);
 		db.closeDB();
 		
-		historyItem hi = new historyItem();
-		for (historyItem item : checkoutList) {
-			if(item.getUPC() == upc){
-				hi.addQuantity(1);
-				totalPrice += currentItem.getPrice();
-				tv.setText("$"
-						+ String.format("%.2f", totalPrice));
-				return;
-			}
-			else
-				hi = new historyItem(upc, currentItem.getPrice(), currentDate, 1);
-				break;
+		if (itemExists(upc)){
 		}
-		checkoutList.add(hi);
-		
-		names.add(currentItem.getName());
-		totalPrice += currentItem.getPrice();
+		else {
 
-		adapter.notifyDataSetChanged();
+			HistoryItem hi = new HistoryItem(upc, i1.getPrice(), currentDate, 1);
+			checkoutList.add(hi);
+			names.add(i1.getName());
+		}
+		totalPrice += i1.getPrice();
 		tv.setText("$" + String.format("%.2f", totalPrice));
-		
-		
 		adapter.notifyDataSetChanged();
+	}
+	
+	private boolean itemExists(String upc){
+		for (HistoryItem item : checkoutList) {
+			if(item.getUPC() == upc){
+				item.addQuantity(1);
+				return true;
+			}
+		}
+		return false;
 	}
 }
