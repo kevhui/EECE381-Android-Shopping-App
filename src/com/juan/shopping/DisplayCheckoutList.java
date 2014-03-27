@@ -30,7 +30,7 @@ import com.juan.shopping.sqlitemodel.historyItem;
 
 public class DisplayCheckoutList extends Activity {
 
-	public List<historyItem> checkoutList; // make into historyItem later
+	public List<historyItem> checkoutList;
 	private List<String> names;
 	ArrayAdapter<String> adapter;
 	private double totalPrice;
