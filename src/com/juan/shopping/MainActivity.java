@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 		shoppingListdb = new ShoppingListDatabaseHelper(getApplicationContext());
 		shoppingListdb.closeDB();
 		historydb = new CheckoutListDatabaseHelper(getApplicationContext());
-		storedb.closeDB();
+		historydb.closeDB();
 	}
 
 

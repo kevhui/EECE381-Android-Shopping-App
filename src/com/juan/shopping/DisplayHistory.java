@@ -47,6 +47,8 @@ public class DisplayHistory extends ListActivity {
 		db = new CheckoutListDatabaseHelper(getApplicationContext());
 		checkoutList = db.getAllItems();
 		db.closeDB();
+		
+		Log.d("DisplayHistory", "size: " + checkoutList.size());
 
 		StoreDatabaseHelper storeDb = new StoreDatabaseHelper(
 				getApplicationContext());

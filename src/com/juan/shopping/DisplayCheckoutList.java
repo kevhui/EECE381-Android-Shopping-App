@@ -27,20 +27,6 @@ import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.Shopping_list_item;
 import com.juan.shopping.sqlitemodel.historyItem;
 
-//Change the hard coded ip adress
-//Connect to middleman via option 3 (android->android)
-//Press the checkout button
-//Once the above works merge onto master
-//change the onClick in the checkout_list.xml from sendMessage to w/e
-//Note: I'm not sure if the barcodes that i printed (that brittaney has)
-// are still in the database and the app crashes if you query something 
-// that is not in the database, Brittaney can make new barcodes with the following
-//073141551342
-//058807415817
-//678523080016
-//058807414025
-//http://www.barcoding.com/upc/#.UyqvFvldVOc
-//select UPC A -> copy to word -> resize and print
 
 public class DisplayCheckoutList extends Activity {
 
@@ -105,49 +91,6 @@ public class DisplayCheckoutList extends Activity {
 	// Called when the user wants to send a message
 
 	public void sendMessage(View view) {
-//		MyApplication app = (MyApplication) getApplication();
-//
-//		// Get the message from the box
-//
-//		//EditText et = (EditText) findViewById(R.id.MessageText);
-//		//String msg = et.getText().toString();
-//		Log.d("Debug","Send message");
-//		int i = (int)((Math.random()*100)%4);
-//		String msg;
-//		
-//		if ( i == 0){
-//		msg = "073141551342";
-//		}
-//		else if ( i == 1){
-//		msg = "678523080016";
-//		}
-//		else if ( i == 2){
-//		msg = "058807415817";
-//		}
-//		else{
-//		msg = "058807414025";
-//		}
-//		
-//		// Create an array of bytes. First byte will be the
-//		// message length, and the next ones will be the message
-//		byte buf[] = new byte[msg.length() + 1];
-//		buf[0] = (byte) msg.length();
-//		System.arraycopy(msg.getBytes(), 0, buf, 1, msg.length());
-//		// Now send through the output stream of the socket
-//
-//		OutputStream out;
-//		try {
-//			out = app.sock.getOutputStream();
-//			try {
-//				out.write(buf, 0, msg.length() + 1);
-//			} catch (IOException e) {
-//				Log.d("DEBUG", "error");
-//				e.printStackTrace();
-//			}
-//		} catch (IOException e) {
-//			Log.d("DEBUG", "error");
-//			e.printStackTrace();
-//		}
 		
 		CheckoutListDatabaseHelper db = new CheckoutListDatabaseHelper(getApplicationContext());;
 		for (historyItem item : checkoutList) {
@@ -300,5 +243,59 @@ public class DisplayCheckoutList extends Activity {
 				}
 			}
 		}
+	}
+	
+	public void addItem(View view){
+		MyApplication app = (MyApplication) getApplication();
+
+		// Get the message from the box
+
+		Log.d("Debug","Send message");
+		int i = (int)((Math.random()*100)%4);
+		String upc;
+		
+		if ( i == 0){
+			upc = "073141551342";
+		}
+		else if ( i == 1){
+			upc = "678523080016";
+		}
+		else if ( i == 2){
+			upc = "058807415817";
+		}
+		else{
+			upc = "058807414025";
+		}
+		
+		String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+
+		StoreDatabaseHelper db = new StoreDatabaseHelper(
+				getApplicationContext());
+		Item currentItem = db.getItem(upc);
+		db.closeDB();
+		
+		historyItem hi = new historyItem();
+		for (historyItem item : checkoutList) {
+			if(item.getUPC() == upc){
+				hi.addQuantity(1);
+				totalPrice += currentItem.getPrice();
+				tv.setText("$"
+						+ String.format("%.2f", totalPrice));
+				return;
+			}
+			else
+				hi = new historyItem(upc, currentItem.getPrice(), currentDate, 1);
+				break;
+		}
+		checkoutList.add(hi);
+		
+		names.add(currentItem.getName());
+		totalPrice += currentItem.getPrice();
+
+		adapter.notifyDataSetChanged();
+		tv.setText("$" + String.format("%.2f", totalPrice));
+		
+		
+		adapter.notifyDataSetChanged();
 	}
 }
