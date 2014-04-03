@@ -35,8 +35,8 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
 	// Item table create statement
 	private static final String CREATE_TABLE_CHECKOUT_LIST = "CREATE TABLE "
-			+ TABLE_CHECKOUT_LIST + "(" + KEY_UPC + " TEXT PRIMARY KEY,"
-			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " TEXT" + ")";
+			+ TABLE_CHECKOUT_LIST + "(" + KEY_UPC + " TEXT,"
+			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " TEXT," + "PRIMARY KEY( " + KEY_UPC + "," + KEY_DATE + "))";
 	
 	public CheckoutListDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
