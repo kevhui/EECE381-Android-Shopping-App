@@ -54,7 +54,7 @@
 	        android:textSize="10sp"
 	        android:text="ADD"
 	        android:layout_marginRight="10dp"
-	        android:onClick="addItem"/>
+	        android:onClick="sendUpc"/>
 	</LinearLayout>
  
 </RelativeLayout>
