@@ -148,6 +148,53 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
 		return checkoutList;
 	}
+	
+	public List<String> getAllDates() {
+		List<String> checkoutDates = new ArrayList<String>();
+
+		String selectQuery = "SELECT DISTINCT " + KEY_DATE + " FROM " + TABLE_CHECKOUT_LIST;
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				checkoutDates.add(c.getString(c.getColumnIndex(KEY_DATE)));
+			} while (c.moveToNext());
+		}
+
+		return checkoutDates;
+	}
+
+	public List<HistoryItem> getItemsByDate(String date) {
+		List<HistoryItem> checkoutList = new ArrayList<HistoryItem>();
+
+		String selectQuery = "SELECT * FROM " + TABLE_CHECKOUT_LIST + " WHERE " + KEY_DATE + " = '" + date + "'";
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				HistoryItem item = new HistoryItem();
+				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
+				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				item.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+				item.setPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)));
+				item.setRid(c.getInt(c.getColumnIndex(KEY_RID)));
+				// adding item to list
+				checkoutList.add(item);
+			} while (c.moveToNext());
+		}
+
+		return checkoutList;
+	}
 
 	// Getting number of items in shopping list
 	public int getItemCount() {

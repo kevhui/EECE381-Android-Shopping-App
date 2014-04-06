@@ -120,18 +120,18 @@ public class DisplayCheckoutList extends Activity {
 		MyApplication app = (MyApplication) getApplication();
 		// Get made up upc
 
-		int i = (int)((Math.random()*100)%4);
+		int i = (int)((Math.random()*100)%2);
 		String upc;
 		
 		if ( i == 0){
 			upc = "073141551342";
 		}
-		else if ( i == 1){
-			upc = "678523080016";
-		}
-		else if ( i == 2){
-			upc = "058807415817";
-		}
+//		else if ( i == 1){
+//			upc = "678523080016";
+//		}
+//		else if ( i == 2){
+//			upc = "058807415817";
+//		}
 		else{
 			upc = "058807414025";
 		}

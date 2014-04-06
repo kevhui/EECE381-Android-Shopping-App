@@ -63,4 +63,9 @@ public class MainActivity extends Activity {
 		startActivity(intent);
 	}
 
+	public void onClickRecommendedItems(View view) {
+		Intent intent = new Intent(this, DisplayRecommendedList.class);
+		startActivity(intent);
+	}
+	
 }

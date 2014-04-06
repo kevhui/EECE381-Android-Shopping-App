@@ -5,13 +5,22 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -22,26 +31,34 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.juan.shopping.DisplayItems.GetImage;
+import com.juan.shopping.DisplayShoppingList.GetImage;
+import com.juan.shopping.DisplayShoppingList.GetItems;
+import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
+import com.juan.shopping.sqlitemodel.HistoryItem;
 import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.Shopping_list_item;
 
-public class DisplayShoppingList extends ListActivity {
+public class DisplayRecommendedList extends ListActivity {
 	private List<Shopping_list_item> shoppingList;
-	private List<Item> itemList;
+	private List<Item> recommendedList;
 	private List<String> names;
+	private List<String> dateList;
 	private Shopping_list_item clickedItem;
 	private NumberPicker np;
 	private int clickedItemPosition;
@@ -56,33 +73,79 @@ public class DisplayShoppingList extends ListActivity {
 
 		names = new ArrayList<String>();
 		shoppingList = new ArrayList<Shopping_list_item>();
-		itemList = new ArrayList<Item>();
+		recommendedList = new ArrayList<Item>();
+		dateList = new ArrayList<String>();
 
 		ShoppingListDatabaseHelper db;
 		db = new ShoppingListDatabaseHelper(getApplicationContext());
 		shoppingList = db.getAllItems();
 		db.closeDB();
 
-//		StoreDatabaseHelper storeDb = new StoreDatabaseHelper(
-//				getApplicationContext());
-//		for (Shopping_list_item item : shoppingList) {
-//			// Add to a list to display
-//			Item storeItem = storeDb.getItem(item.getUPC());
-//			names.add(storeItem.getName());
-//		}
-//		storeDb.closeDB();
+		CheckoutListDatabaseHelper cldb;
+		cldb = new CheckoutListDatabaseHelper(getApplicationContext());
+		dateList = cldb.getAllDates();
+		cldb.closeDB();
+
 		adapter = new ArrayAdapter<String>(this, R.layout.shopping_list,
 				R.id.itemName, names);
 
 		setListAdapter(adapter);
-		
+
 		List<String> upcList = new ArrayList<String>();
-		for (Shopping_list_item i : shoppingList){
+		for (Shopping_list_item i : shoppingList) {
 			upcList.add(i.getUPC());
 		}
+
+		List<HistoryItem> recieptItems = new ArrayList<HistoryItem>();
+		List<String> receiptUPC = new ArrayList<String>();
+		double similarity = 0.0;
+		HashMap<String, Double> similarityList = new HashMap<String, Double>();
+
+		// Go through each reciept
+		for (String d : dateList) {
+			receiptUPC.clear();
+			similarity = 0.0;
+
+			cldb = new CheckoutListDatabaseHelper(getApplicationContext());
+			recieptItems = cldb.getItemsByDate(d);
+			// Go through each item in reciept
+			for (HistoryItem i : recieptItems) {
+				receiptUPC.add(i.getUPC());
+			}
+			cldb.closeDB();
+
+			similarity = calculateCosineSimilarity(upcList, receiptUPC);
+
+			// Relate the similarity to the date
+			similarityList.put(d, similarity);
+			Log.d("Recommended Item","Date: " + d + "has similiarity " + similarity);
+		}
+
+		//Find the Max similarity
+		Comparator<Map.Entry<String, Double>> comparator = new Comparator<Map.Entry<String, Double>>() {
+			public int compare(Map.Entry<String, Double> e1,
+					Map.Entry<String, Double> e2) {
+				return e1.getValue().compareTo(e2.getValue());
+			}
+		};
 		
-		if( upcList.size() != 0 ){
-			new GetItems().execute(upcList);
+		String similiarRecieptDate = Collections.max(similarityList.entrySet(), comparator).getKey();
+		
+		receiptUPC.clear();
+		cldb = new CheckoutListDatabaseHelper(getApplicationContext());
+		recieptItems = cldb.getItemsByDate(similiarRecieptDate);
+		for (HistoryItem i : recieptItems) {
+			Log.d("Recommended Item","Adding to recommended: " + i.getUPC());
+			receiptUPC.add(i.getUPC());
+		}
+		cldb.closeDB();
+		
+		for (String i : receiptUPC){
+			Log.i("DEBUG", "IN recieptUPC " + i);
+		}
+		
+		if (upcList.size() != 0) {
+			new GetItems().execute(receiptUPC);
 		}
 	}
 
@@ -114,7 +177,8 @@ public class DisplayShoppingList extends ListActivity {
 		tv.setText(names.get(position));
 
 		// Display the picture
-		new GetImage().execute(itemList.get(clickedItemPosition).getImage());
+		new GetImage().execute(recommendedList.get(clickedItemPosition)
+				.getImage());
 
 		// Setup the number picker
 		np.setMinValue(0);
@@ -189,13 +253,14 @@ public class DisplayShoppingList extends ListActivity {
 
 		@Override
 		protected List<Item> doInBackground(List<String>... upcList) {
-			Log.i("MainActivity", "Inside the asynchronous task");
+			Log.i("GetItems", "Inside the asynchronous task");
 
 			List<Item> list_items = new ArrayList<Item>();
 
 			// Creating service handler class instance
 			ServiceHandler sh = new ServiceHandler();
-
+			Log.i("GetItems", "Need to query " + upcList.length + " item(s)");
+			
 			for (int i = 0; i < upcList[0].size(); i++) {
 				// Making a request to url and getting response
 				String jsonStr = sh
@@ -212,8 +277,8 @@ public class DisplayShoppingList extends ListActivity {
 
 						// Getting JSON Array node
 						item = jsonObj.getJSONObject("item");
-						
-						//JSONObject data = item.getJSONObject(0);
+
+						// JSONObject data = item.getJSONObject(0);
 
 						tempItem = new Item();
 						tempItem.setUpc(item.getString("upc"));
@@ -222,7 +287,8 @@ public class DisplayShoppingList extends ListActivity {
 						tempItem.setPrice(item.getInt("price"));
 						tempItem.setCategory(item.getString("category"));
 						tempItem.setImage(item.getString("image"));
-						Log.d("Response: ","Adding to list: " + tempItem.getName());
+						Log.d("Response: ",
+								"Adding to list: " + tempItem.getName());
 						list_items.add(tempItem);
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -245,11 +311,11 @@ public class DisplayShoppingList extends ListActivity {
 		@Override
 		protected void onPostExecute(List<Item> result) {
 			names.clear();
-			itemList.clear();
+			recommendedList.clear();
 
 			for (Item i : result) {
 				names.add(i.getName());
-				itemList.add(i);
+				recommendedList.add(i);
 			}
 			adapter.notifyDataSetChanged();
 		}
@@ -296,6 +362,30 @@ public class DisplayShoppingList extends ListActivity {
 		protected void onPostExecute(Bitmap result) {
 			iv.setImageBitmap(result);
 		}
+	}
+
+	public static Double calculateCosineSimilarity(List<String> shoppingList,
+			List<String> reciept) {
+		Double similarity = 0.0; // The similarity range from -1 to 1
+		Double sum = 0.0; // the sum of the dot product for each item
+		Double SLnorm = 0.0; // the normal of the shoppingList
+		Double Rnorm = 0.0; // the normal of the receipt
+		for (String upc : shoppingList) {
+			if (reciept.contains(upc)) {
+				sum++;
+			}
+		}
+		SLnorm = calculateNorm(shoppingList);
+		Rnorm = calculateNorm(reciept);
+		similarity = sum / (SLnorm * Rnorm);
+		return similarity;
+	}
+
+	// calculate the norm of one vector
+	// Simplified normal because our vector is either 0 or 1 (bought or not
+	// bought)
+	public static Double calculateNorm(List<String> itemList) {
+		return Math.sqrt(Math.pow(itemList.size(), 2));
 	}
 
 }

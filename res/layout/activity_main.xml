@@ -52,6 +52,15 @@
         android:layout_below="@+id/bHistory"
         android:onClick="onClickBarcodeScanner"
         android:text="Scan Barcode" />
+    
+	<Button
+        android:id="@+id/bRecommendedItems"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/ConnectToDE2"
+        android:layout_below="@id/ConnectToDE2"
+        android:onClick="onClickRecommendedItems"
+        android:text="Recommended Items" />
 
     <Button
         android:id="@+id/bEditShoppingList"
