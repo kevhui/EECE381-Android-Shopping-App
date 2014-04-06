@@ -14,5 +14,6 @@
     <string name="checkout_quantity">quantity</string>
     <string name="checkout_price">price</string>
     <string name="checkout_date">date</string>
-
+    <string name="checkout_rid">RID</string>
+    
 </resources>

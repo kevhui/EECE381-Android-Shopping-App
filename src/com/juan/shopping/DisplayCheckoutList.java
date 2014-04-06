@@ -96,8 +96,13 @@ public class DisplayCheckoutList extends Activity {
 	// Called when the user wants to send a message
 
 	public void sendMessage(View view) {
+		String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		
 		CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());
+		for (HistoryItem item : checkoutList) {
+			item.setDate(currentDate);
+			item.setRid(cdb.getRid() + 1);
+		}
 		for (HistoryItem item : checkoutList) {
 			cdb.addItem(item);
 			Log.d("Debug","upc = " + item.getUPC());
@@ -351,7 +356,6 @@ public class DisplayCheckoutList extends Activity {
 		if (itemExists(upc)){
 		}
 		else {
-
 			HistoryItem hi = new HistoryItem(upc, i1.getPrice(), currentDate, 1);
 			checkoutList.add(hi);
 			names.add(i1.getName());
