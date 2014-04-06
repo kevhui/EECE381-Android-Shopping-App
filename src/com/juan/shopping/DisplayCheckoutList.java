@@ -2,6 +2,7 @@ package com.juan.shopping;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -10,6 +11,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,7 +21,10 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
@@ -34,7 +41,9 @@ public class DisplayCheckoutList extends Activity {
 	private double totalPrice;
 	ListView list;
 	TextView tv;
-
+	JSONObject json_item = null;
+	Item item;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -91,7 +100,7 @@ public class DisplayCheckoutList extends Activity {
 	public void sendMessage(View view) {
 		String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 		
-		CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());;
+		CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());
 		for (HistoryItem item : checkoutList) {
 			item.setDate(currentDate);
 			item.setRid(cdb.getRid() + 1);
@@ -106,6 +115,58 @@ public class DisplayCheckoutList extends Activity {
 		tv.setText("$" + String.format("%.2f", totalPrice));
 		names.clear();
 		adapter.notifyDataSetChanged();
+	}
+	
+
+	public void sendUpc(View view) {
+		MyApplication app = (MyApplication) getApplication();
+		// Get made up upc
+
+		RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup1);
+		RadioButton selectRadio = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
+		String selected = selectRadio.getText().toString();
+		
+		
+		//int i = (int)((Math.random()*100)%2);
+		String upc = "058779203061";
+		
+		if ( selected.equals("Magnum")){
+			upc = "058779203061";
+		}
+		else if ( selected.equals("Peach")){
+			upc = "058779278090";
+		}
+		else if ( selected.equals("Banana")){
+			upc = "055000892957";
+		}
+		else if ( selected.equals("Vanilla")){
+			upc = "681131913461";
+		}
+		else if ( selected.equals("Dark")){
+			upc ="681131913454";
+		}
+
+		Log.d("Debug","send upc" + upc);
+		// Create an array of bytes. First byte will be the
+		// message length, and the next ones will be the message
+
+		byte buf[] = new byte[upc.length() + 1];
+		buf[0] = (byte) upc.length();
+		System.arraycopy(upc.getBytes(), 0, buf, 1, upc.length());
+		// Now send through the output stream of the socket
+
+		OutputStream out;
+		try {
+			out = app.sock.getOutputStream();
+
+			try {
+				out.write(buf, 0, upc.length() + 1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Called when the user closes a socket
@@ -123,7 +184,7 @@ public class DisplayCheckoutList extends Activity {
 	// Construct an IP address from the four boxes
 
 	public String getConnectToIP() {
-		String ip = "128.189.221.246";
+		String ip = "192.168.1.101";
 		return ip;
 	}
 
@@ -197,6 +258,46 @@ public class DisplayCheckoutList extends Activity {
 
 						final String s = new String(buf, 0, bytes_avail,
 								"US-ASCII");
+						
+						
+
+						ServiceHandler sh = new ServiceHandler();
+
+						String upc = s.substring(1);
+						
+						// Making a request to url and getting response
+						String jsonStr = sh
+								.makeServiceCall("http://162.243.133.20/items/" + upc);
+
+						Log.d("Response: ", "Query item upc: " + upc);
+						Log.d("Response: ", "> " + jsonStr);
+
+						item = new Item();
+
+						if (jsonStr != null) {
+							try {
+								JSONObject jsonObj = new JSONObject(jsonStr);
+
+								// Getting JSON Array node
+								json_item = jsonObj.getJSONObject("item");
+								
+								//JSONObject data = item.getJSONObject(0);
+
+								item = new Item();
+								item.setUpc(json_item.getString("upc"));
+								item.setName(json_item.getString("name"));
+								item.setDescription(json_item.getString("description"));
+								item.setPrice(json_item.getInt("price"));
+								item.setCategory(json_item.getString("category"));
+								item.setImage(json_item.getString("image"));
+								Log.d("Response: ","Adding to list: " + item.getName());
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						} else {
+							Log.e("ServiceHandler",
+									"Couldn't get any data from the url");
+						}
 
 						// As explained in the tutorials, the GUI can not be
 						// updated in an asyncrhonous task. So, update the GUI
@@ -209,22 +310,16 @@ public class DisplayCheckoutList extends Activity {
 
 								String upc = s.substring(1);
 								if (upc.length() == 12) {
-									
 									String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-
-									StoreDatabaseHelper db = new StoreDatabaseHelper(
-											getApplicationContext());
-									Item i = db.getItem(upc);
-									db.closeDB();
 									
 									if (itemExists(upc)){
 									}
 									else {
-										HistoryItem hi = new HistoryItem(upc, i.getPrice(), currentDate, 1);
+										HistoryItem hi = new HistoryItem(upc, item.getPrice(), currentDate, 1);
 										checkoutList.add(hi);
-										names.add(i.getName());
+										names.add(item.getName());
 									}
-									totalPrice += i.getPrice();
+									totalPrice += item.getPrice();
 									tv.setText("$" + String.format("%.2f", totalPrice));
 									adapter.notifyDataSetChanged();
 								}

@@ -7,6 +7,7 @@ public class Item {
 	String description;
 	float price;
 	String category;
+	String image;
 
 	
 	//TODO: dont think i need the constructors anymore
@@ -24,7 +25,7 @@ public class Item {
 		this.upc = upc;
 		this.name = name;
 		this.category = category;
-	}
+	}	
 	
 	//Getters and Setters
 
@@ -55,6 +56,10 @@ public class Item {
 	public float getPrice() {
 		return price;
 	}
+	
+	public String getImage(){
+		return image;
+	}
 
 	public void setPrice(float price) {
 		this.price = price;
@@ -66,6 +71,10 @@ public class Item {
 
 	public void setCategory(String category) {
 		this.category = category;
+	}
+	
+	public void setImage(String image){
+		this.image = image;
 	}
 
 }

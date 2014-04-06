@@ -47,7 +47,7 @@ public class BarcodeScanner extends Activity{
 		
 		if (scanningResult != null) {
 			
-			//TODO: add a try catch
+			//TODO: get rid of store database helper
 			shopdb = new StoreDatabaseHelper(getApplicationContext());
 			foundItem = shopdb.getItem(scanningResult.getContents());
 			shopdb.closeDB();

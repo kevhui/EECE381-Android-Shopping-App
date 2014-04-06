@@ -4,14 +4,21 @@ package com.juan.shopping.sqlitehelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
+import com.juan.shopping.ServiceHandler;
 import com.juan.shopping.sqlitemodel.HistoryItem;
+import com.juan.shopping.sqlitemodel.Item;
 
 public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
@@ -39,8 +46,13 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 			+ TABLE_CHECKOUT_LIST + "(" + KEY_UPC + " TEXT,"
 			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " TEXT," + KEY_RID + " INTEGER PRIMARY KEY)";
 	
+	JSONArray item = null;
+	
+	private List<Item> itemList;
+	
 	public CheckoutListDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		itemList = new ArrayList<Item>();
 	}
 
 	@Override
@@ -115,6 +127,52 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		List<HistoryItem> checkoutList = new ArrayList<HistoryItem>();
 
 		String selectQuery = "SELECT  * FROM " + TABLE_CHECKOUT_LIST;
+
+		Log.e(LOG, selectQuery);
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				HistoryItem item = new HistoryItem();
+				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
+				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				item.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+				item.setPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)));
+				item.setRid(c.getInt(c.getColumnIndex(KEY_RID)));
+				// adding item to list
+				checkoutList.add(item);
+			} while (c.moveToNext());
+		}
+
+		return checkoutList;
+	}
+	
+	public List<String> getAllDates() {
+		List<String> checkoutDates = new ArrayList<String>();
+
+		String selectQuery = "SELECT DISTINCT " + KEY_DATE + " FROM " + TABLE_CHECKOUT_LIST;
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				checkoutDates.add(c.getString(c.getColumnIndex(KEY_DATE)));
+			} while (c.moveToNext());
+		}
+
+		return checkoutDates;
+	}
+
+	public List<HistoryItem> getItemsByDate(String date) {
+		List<HistoryItem> checkoutList = new ArrayList<HistoryItem>();
+
+		String selectQuery = "SELECT * FROM " + TABLE_CHECKOUT_LIST + " WHERE " + KEY_DATE + " = '" + date + "'";
 
 		Log.e(LOG, selectQuery);
 
@@ -224,4 +282,70 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 			db.close();
 	}
 
+	
+	class GetItems extends AsyncTask<List<String>, Void, List<Item>> {
+
+		// This is the "guts" of the asynchronus task. The code
+		// in doInBackground will be executed in a separate thread
+
+		@Override
+		protected List<Item> doInBackground(List<String>... list_upc) {
+			Log.i("MainActivity", "Inside the asynchronous task");
+
+			List<Item> list_items = new ArrayList<Item>();
+
+			// Creating service handler class instance
+			ServiceHandler sh = new ServiceHandler();
+
+			for ( List<String> u : list_upc){
+				// Making a request to url and getting response
+				String jsonStr = sh.makeServiceCall("http://162.243.133.20/items/"+ u);
+	
+				Log.d("Response: ", "> " + jsonStr);
+	
+				if (jsonStr != null) {
+					try {
+						JSONObject jsonObj = new JSONObject(jsonStr);
+	
+						// Getting JSON Array node
+						item = jsonObj.getJSONArray("items");
+	
+						// loop through all items
+							JSONObject data = item.getJSONObject(0);
+	
+							Item tempItem = new Item();
+							tempItem.setUpc(data.getString("upc"));
+							tempItem.setName(data.getString("name"));
+							tempItem.setDescription(data.getString("description"));
+							tempItem.setPrice(data.getInt("price"));
+							tempItem.setCategory(data.getString("category"));
+							tempItem.setImage(data.getString("image"));
+							Log.d("Response: ",
+									"Adding to list: " + tempItem.getName());
+							list_items.add(tempItem);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				} else {
+					Log.e("ServiceHandler", "Couldn't get any data from the url");
+				}
+
+			}
+			return list_items;
+		}
+
+		// This routine is called at the end of the task. This
+		// routine is run as part of the main thread, so it can
+		// update the GUI. The input parameter is automatically
+		// set by the output parameter of doInBackground()
+
+		@Override
+		protected void onPostExecute(List<Item> result) {
+			itemList.clear();
+			for (Item i : result) {
+				itemList.add(i);
+			}
+
+		}
+	}
 }
