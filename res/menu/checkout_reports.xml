@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Settings, should always be in the overflow -->
+    <item
+        android:id="@+id/action_popular"
+        android:showAsAction="never"
+        android:title="@string/action_popular"/>
+    <item 
+        android:id="@+id/action_average_price" 
+        android:showAsAction="never"
+        android:title="@string/action_average_price"/>
+
+    <item 
+        android:id="@+id/action_date" 
+        android:showAsAction="never"
+        android:title="@string/action_date"/>
+
+</menu>

@@ -5,6 +5,9 @@
     <string name="subtext">Theres only Juan place to go</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
+    <string name="action_popular">Popularity</string>
+    <string name="action_average_price">Average Price</string>
+    <string name="action_date">Date of Purchase</string>
     <string name="hello_world">Hello world!</string>
     <string name="sDisplayCategories">Categories</string>
     <string name="sDisplayItems">category</string>
