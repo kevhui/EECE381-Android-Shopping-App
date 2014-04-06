@@ -23,6 +23,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
@@ -120,20 +122,28 @@ public class DisplayCheckoutList extends Activity {
 		MyApplication app = (MyApplication) getApplication();
 		// Get made up upc
 
-		int i = (int)((Math.random()*100)%2);
-		String upc;
+		RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup1);
+		RadioButton selectRadio = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
+		String selected = selectRadio.getText().toString();
 		
-		if ( i == 0){
-			upc = "073141551342";
+		
+		//int i = (int)((Math.random()*100)%2);
+		String upc = "058779203061";
+		
+		if ( selected.equals("Magnum")){
+			upc = "058779203061";
 		}
-//		else if ( i == 1){
-//			upc = "678523080016";
-//		}
-//		else if ( i == 2){
-//			upc = "058807415817";
-//		}
-		else{
-			upc = "058807414025";
+		else if ( selected.equals("Peach")){
+			upc = "058779278090";
+		}
+		else if ( selected.equals("Banana")){
+			upc = "055000892957";
+		}
+		else if ( selected.equals("Vanilla")){
+			upc = "681131913461";
+		}
+		else if ( selected.equals("Dark")){
+			upc ="681131913454";
 		}
 
 		Log.d("Debug","send upc" + upc);
