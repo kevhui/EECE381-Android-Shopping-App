@@ -207,16 +207,22 @@ public class DisplayItems extends ListActivity {
 						itemFilteredList.clear();
 
 						// Open database and query all items with a certain
-						// category and string
-						StoreDatabaseHelper db;
-						db = new StoreDatabaseHelper(getApplicationContext());
-						itemFilteredList = db.getAllItemsByCategoryAndString(
-								category, filter);
-						for (Item i : itemFilteredList) {
-							categoryList.add(i.getName());
-						}
-						db.closeDB();
-						adapter.notifyDataSetChanged();
+						// // category and string
+						// StoreDatabaseHelper db;
+						// db = new
+						// StoreDatabaseHelper(getApplicationContext());
+						// itemFilteredList = db.getAllItemsByCategoryAndString(
+						// category, filter);
+						// for (Item i : itemFilteredList) {
+						// categoryList.add(i.getName());
+						// }
+						// db.closeDB();
+						// adapter.notifyDataSetChanged();
+
+						new GetItems()
+								.execute("http://162.243.133.20/category/"
+										+ category.replaceAll(" ", "%20")
+										+ "?tag=" + filter.replace(" ", "%20"));
 					}
 				});
 

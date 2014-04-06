@@ -385,7 +385,7 @@ public class DisplayRecommendedList extends ListActivity {
 	// Simplified normal because our vector is either 0 or 1 (bought or not
 	// bought)
 	public static Double calculateNorm(List<String> itemList) {
-		return Math.sqrt(Math.pow(itemList.size(), 2));
+		return Math.sqrt(itemList.size());
 	}
 
 }
