@@ -82,14 +82,16 @@ public class DisplayHistory extends ListActivity {
 		TextView tvQ = (TextView) popupView.findViewById(R.id.tvItemQuantityCheckoutList);
 		TextView tvP = (TextView) popupView.findViewById(R.id.tvItemPriceCheckoutList);
 		TextView tvD = (TextView) popupView.findViewById(R.id.tvItemDateCheckoutList);
+		TextView tvI = (TextView) popupView.findViewById(R.id.tvItemRidCheckoutList);
 		ImageView iv = (ImageView) popupView.findViewById(R.id.ivItemImageCheckoutList);
 		
 		Log.d("DisplayHistory",
 				"setViews");
-		tvN.setText(names.get(position));
-		tvQ.setText(Integer.toString(checkoutList.get(position).getQuantity()));
-		tvP.setText("$" + String.format("%.2f", checkoutList.get(position).getPrice()));
-		tvD.setText(checkoutList.get(position).getDate());
+		tvN.setText("Name: " + names.get(position));
+		tvQ.setText("Quantity: " + Integer.toString(checkoutList.get(position).getQuantity()));
+		tvP.setText("Price: $" + String.format("%.2f", checkoutList.get(position).getPrice()));
+		tvD.setText("Date: " + checkoutList.get(position).getDate());
+		tvI.setText("Receipt Number: " + Integer.toString(checkoutList.get(position).getRid()));
 		
 		Log.d("DisplayHistory",
 				"display pic");
