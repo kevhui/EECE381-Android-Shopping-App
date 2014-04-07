@@ -19,6 +19,7 @@ import android.util.Log;
 import com.juan.shopping.ServiceHandler;
 import com.juan.shopping.sqlitemodel.HistoryItem;
 import com.juan.shopping.sqlitemodel.Item;
+import com.juan.shopping.sqlitemodel.AveragePopularItem;
 
 public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
@@ -44,7 +45,7 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 	// Item table create statement
 	private static final String CREATE_TABLE_CHECKOUT_LIST = "CREATE TABLE "
 			+ TABLE_CHECKOUT_LIST + "(" + KEY_UPC + " TEXT,"
-			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " TEXT," + KEY_RID + " INTEGER PRIMARY KEY)";
+			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " TEXT," + KEY_RID + " INTEGER," + " PRIMARY KEY(" + KEY_UPC + "," + KEY_DATE + "))";
 	
 	JSONArray item = null;
 	
@@ -195,6 +196,75 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
 		return checkoutList;
 	}
+	
+	public List<AveragePopularItem> getItemByPopularity() {
+		List<AveragePopularItem> quantities = new ArrayList<AveragePopularItem>();
+
+		String selectQuery = "SELECT SUM(quantity),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				AveragePopularItem item = new AveragePopularItem();
+				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
+				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				quantities.add(item);
+			} while (c.moveToNext());
+		}
+
+		return quantities;
+	}
+	
+	public List<AveragePopularItem> getItemByAverage() {
+		List<AveragePopularItem> quantities = new ArrayList<AveragePopularItem>();
+
+		String selectQuery = "SELECT SUM(quantity),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				AveragePopularItem item = new AveragePopularItem();
+				item.setQuantity((c.getInt(c.getColumnIndex(KEY_QUANTITY))/this.getMaxRid()));
+				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				quantities.add(item);
+			} while (c.moveToNext());
+		}
+
+		return quantities;
+	}
+	
+	public List<AveragePopularItem> getItemExpensive() {
+		List<AveragePopularItem> quantities = new ArrayList<AveragePopularItem>();
+
+		String selectQuery = "SELECT SUM(quantity),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// loop through all rows and add to list
+		if (c.moveToFirst()) {
+			do {
+				AveragePopularItem item = new AveragePopularItem();
+				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
+				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				quantities.add(item);
+			} while (c.moveToNext());
+		}
+
+		return quantities;
+	}
 
 	// Getting number of items in shopping list
 	public int getItemCount() {
@@ -209,7 +279,7 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		return count;
 	}
 	
-	public int getRid(){
+	public int getMaxRid(){
 		String query = "SELECT MAX(rid) FROM " + TABLE_CHECKOUT_LIST;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
