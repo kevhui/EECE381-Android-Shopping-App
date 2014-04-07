@@ -130,7 +130,7 @@ public class DisplayCheckoutList extends Activity {
 		CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());
 		for (HistoryItem item : checkoutList) {
 			item.setDate(currentDate);
-			item.setRid(cdb.getRid() + 1);
+			item.setRid(cdb.getMaxRid() + 1);
 		}
 		for (HistoryItem item : checkoutList) {
 			cdb.addItem(item);
