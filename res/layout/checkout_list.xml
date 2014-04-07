@@ -6,21 +6,32 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:gravity="center_horizontal|left"
         android:orientation="vertical"
-        android:weightSum="1.0" >
+        android:weightSum="2.0" >
 
-        <ListView
-            android:id="@+id/LIST_OF_ITEMS"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.81"
-            android:divider="#b5b5b5"
-            android:dividerHeight="1dp" />
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="150dp"
+            android:layout_height="43dp"
+            android:gravity="center_horizontal"
+            android:onClick="sendMessageToDE2"
+            android:text="Get User ID"
+            android:textAlignment="center" />
 
         <View
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="0.19" />
+
+        <ListView
+            android:id="@+id/LIST_OF_ITEMS"
+            android:layout_width="wrap_content"
+            android:layout_height="324dp"
+            android:layout_weight="0.89"
+            android:divider="#b5b5b5"
+            android:dividerHeight="1dp" >
+        </ListView>
     </LinearLayout>
 
     <LinearLayout
@@ -54,14 +65,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Banana" />
-            
+
             <RadioButton
                 android:id="@+id/radio3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Vanilla" />
-            
-           <RadioButton
+
+            <RadioButton
                 android:id="@+id/radio4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -95,5 +106,15 @@
             android:text="ADD"
             android:textSize="10sp" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="170dp"
+        android:layout_height="40sp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:freezesText="true"
+        android:text="USER ID: "
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

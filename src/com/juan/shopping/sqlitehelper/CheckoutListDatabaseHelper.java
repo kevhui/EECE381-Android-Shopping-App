@@ -1,6 +1,5 @@
 package com.juan.shopping.sqlitehelper;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,13 +42,13 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
 	// Item table create statement
 	private static final String CREATE_TABLE_CHECKOUT_LIST = "CREATE TABLE "
-			+ TABLE_CHECKOUT_LIST + "(" + KEY_UPC + " TEXT,"
-			+ KEY_QUANTITY	+ " INTEGER," + KEY_PRICE + " REAL," + KEY_DATE + " TEXT," + KEY_RID + " INTEGER PRIMARY KEY)";
-	
+			+ TABLE_CHECKOUT_LIST + "(" + KEY_UPC + " TEXT," + KEY_QUANTITY + " INTEGER, " + KEY_PRICE + " REAL," + KEY_DATE
+			+ " TEXT," + KEY_RID + " INTEGER, " + "PRIMARY KEY( " + KEY_UPC
+			+ "," + KEY_DATE + "))";
 	JSONArray item = null;
-	
+
 	private List<Item> itemList;
-	
+
 	public CheckoutListDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		itemList = new ArrayList<Item>();
@@ -69,10 +68,10 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 
-	  //**************************************************************//
-	 //***************** Shopping List table methods ****************//
-	//**************************************************************//
-	
+	// **************************************************************//
+	// ***************** Shopping List table methods ****************//
+	// **************************************************************//
+
 	// Add an item
 	public void addItem(HistoryItem item) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -86,41 +85,41 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
 		db.insert(TABLE_CHECKOUT_LIST, null, values);
 	}
-	
+
 	// Update a row in the shopping list
 	public void updateItem(HistoryItem item) {
 
-	SQLiteDatabase db = this.getWritableDatabase();
+		SQLiteDatabase db = this.getWritableDatabase();
 
-	ContentValues values = new ContentValues();
-	values.put(KEY_UPC, item.getUPC());
-	values.put(KEY_QUANTITY, item.getQuantity());
-	values.put(KEY_PRICE, item.getPrice());
-	values.put(KEY_DATE, item.getDate());
-	values.put(KEY_RID, item.getRid());
+		ContentValues values = new ContentValues();
+		values.put(KEY_UPC, item.getUPC());
+		values.put(KEY_QUANTITY, item.getQuantity());
+		values.put(KEY_PRICE, item.getPrice());
+		values.put(KEY_DATE, item.getDate());
+		values.put(KEY_RID, item.getRid());
 
-	db.update(TABLE_CHECKOUT_LIST, values, KEY_UPC + " = ?",
-			new String[] { String.valueOf(item.getUPC()) });
-	//db.insert(TABLE_SHOPPING_LIST, null, values);
-	Log.i(this.getClass().toString(), "Item updated in checkout list");
-}
+		db.update(TABLE_CHECKOUT_LIST, values, KEY_UPC + " = ?",
+				new String[] { String.valueOf(item.getUPC()) });
+		// db.insert(TABLE_SHOPPING_LIST, null, values);
+		Log.i(this.getClass().toString(), "Item updated in checkout list");
+	}
 
 	// query a single item
-//	public Item checkItemExists(String upc) {
-//		SQLiteDatabase db = this.getReadableDatabase();
-//
-//		String selectQuery = "SELECT  * FROM " + TABLE_CHECKOUT_LIST + " WHERE "
-//				+ KEY_UPC + " = " + "'" + upc + "'";
-//
-//		Log.e(LOG, selectQuery);
-//
-//		Cursor c = db.rawQuery(selectQuery, null);
-//
-//		if (c != null)
-//			c.moveToFirst();
-//		//c.get
-//		
-//	}
+	// public Item checkItemExists(String upc) {
+	// SQLiteDatabase db = this.getReadableDatabase();
+	//
+	// String selectQuery = "SELECT  * FROM " + TABLE_CHECKOUT_LIST + " WHERE "
+	// + KEY_UPC + " = " + "'" + upc + "'";
+	//
+	// Log.e(LOG, selectQuery);
+	//
+	// Cursor c = db.rawQuery(selectQuery, null);
+	//
+	// if (c != null)
+	// c.moveToFirst();
+	// //c.get
+	//
+	// }
 
 	// query the whole shopping list
 	public List<HistoryItem> getAllItems() {
@@ -148,11 +147,12 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
 		return checkoutList;
 	}
-	
+
 	public List<String> getAllDates() {
 		List<String> checkoutDates = new ArrayList<String>();
 
-		String selectQuery = "SELECT DISTINCT " + KEY_DATE + " FROM " + TABLE_CHECKOUT_LIST;
+		String selectQuery = "SELECT DISTINCT " + KEY_DATE + " FROM "
+				+ TABLE_CHECKOUT_LIST;
 
 		Log.e(LOG, selectQuery);
 
@@ -172,7 +172,8 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 	public List<HistoryItem> getItemsByDate(String date) {
 		List<HistoryItem> checkoutList = new ArrayList<HistoryItem>();
 
-		String selectQuery = "SELECT * FROM " + TABLE_CHECKOUT_LIST + " WHERE " + KEY_DATE + " = '" + date + "'";
+		String selectQuery = "SELECT * FROM " + TABLE_CHECKOUT_LIST + " WHERE "
+				+ KEY_DATE + " = '" + date + "'";
 
 		Log.e(LOG, selectQuery);
 
@@ -208,25 +209,23 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		// return count
 		return count;
 	}
-	
-	public int getRid(){
+
+	public int getRid() {
 		String query = "SELECT MAX(rid) FROM " + TABLE_CHECKOUT_LIST;
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery(query, null);
-		
+
 		cursor.moveToFirst();
 		int max = cursor.getInt(0);
-		
+
 		return max;
 	}
 
 	// Deleting an item
 	public void deleteItem(String upc) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TABLE_CHECKOUT_LIST, KEY_UPC + " = ?",
-				new String[] { upc });
+		db.delete(TABLE_CHECKOUT_LIST, KEY_UPC + " = ?", new String[] { upc });
 	}
-	
 
 	// closing database
 	public void closeDB() {
@@ -235,7 +234,6 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 			db.close();
 	}
 
-	
 	class GetItems extends AsyncTask<List<String>, Void, List<Item>> {
 
 		// This is the "guts" of the asynchronus task. The code
@@ -250,37 +248,39 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 			// Creating service handler class instance
 			ServiceHandler sh = new ServiceHandler();
 
-			for ( List<String> u : list_upc){
+			for (List<String> u : list_upc) {
 				// Making a request to url and getting response
-				String jsonStr = sh.makeServiceCall("http://162.243.133.20/items/"+ u);
-	
+				String jsonStr = sh
+						.makeServiceCall("http://162.243.133.20/items/" + u);
+
 				Log.d("Response: ", "> " + jsonStr);
-	
+
 				if (jsonStr != null) {
 					try {
 						JSONObject jsonObj = new JSONObject(jsonStr);
-	
+
 						// Getting JSON Array node
 						item = jsonObj.getJSONArray("items");
-	
+
 						// loop through all items
-							JSONObject data = item.getJSONObject(0);
-	
-							Item tempItem = new Item();
-							tempItem.setUpc(data.getString("upc"));
-							tempItem.setName(data.getString("name"));
-							tempItem.setDescription(data.getString("description"));
-							tempItem.setPrice(data.getInt("price"));
-							tempItem.setCategory(data.getString("category"));
-							tempItem.setImage(data.getString("image"));
-							Log.d("Response: ",
-									"Adding to list: " + tempItem.getName());
-							list_items.add(tempItem);
+						JSONObject data = item.getJSONObject(0);
+
+						Item tempItem = new Item();
+						tempItem.setUpc(data.getString("upc"));
+						tempItem.setName(data.getString("name"));
+						tempItem.setDescription(data.getString("description"));
+						tempItem.setPrice(data.getInt("price"));
+						tempItem.setCategory(data.getString("category"));
+						tempItem.setImage(data.getString("image"));
+						Log.d("Response: ",
+								"Adding to list: " + tempItem.getName());
+						list_items.add(tempItem);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
 				} else {
-					Log.e("ServiceHandler", "Couldn't get any data from the url");
+					Log.e("ServiceHandler",
+							"Couldn't get any data from the url");
 				}
 
 			}

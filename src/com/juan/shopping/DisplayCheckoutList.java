@@ -3,6 +3,7 @@ package com.juan.shopping;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -43,6 +44,9 @@ public class DisplayCheckoutList extends Activity {
 	TextView tv;
 	JSONObject json_item = null;
 	Item item;
+    String s = "1";
+    String ss;
+    String r;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,29 @@ public class DisplayCheckoutList extends Activity {
 		openSocket();
 		// sendMessage();
 	}
+	
+    public void sendMessageToDE2(View view) throws UnsupportedEncodingException{
+        
+        MyApplication app = (MyApplication) getApplication();
+       
+        byte msg[] = new byte[1];
+        msg[0] = (byte) 'I';
+        String value = new String(msg, "UTF-8");
+       
+        OutputStream out;
+        try {
+                out = app.sock.getOutputStream();
+                Log.i("PAST","OUTPUT");
+                try {
+                        out.write(msg, 0, 1);
+                } catch (IOException e) {
+                        e.printStackTrace();
+                }
+        } catch (IOException e) {
+                e.printStackTrace();
+        }
+
+}
 
 	// Route called when the user presses "connect"
 
@@ -114,6 +141,7 @@ public class DisplayCheckoutList extends Activity {
 		totalPrice = 0;
 		tv.setText("$" + String.format("%.2f", totalPrice));
 		names.clear();
+		checkoutList.clear();
 		adapter.notifyDataSetChanged();
 	}
 	
@@ -131,22 +159,22 @@ public class DisplayCheckoutList extends Activity {
 		String upc = "058779203061";
 		
 		if ( selected.equals("Magnum")){
-			upc = "058779203061";
+			upc = "U058779203061";
 		}
 		else if ( selected.equals("Peach")){
-			upc = "058779278090";
+			upc = "U058779278090";
 		}
 		else if ( selected.equals("Banana")){
-			upc = "055000892957";
+			upc = "U055000892957";
 		}
 		else if ( selected.equals("Vanilla")){
-			upc = "681131913461";
+			upc = "U681131913461";
 		}
 		else if ( selected.equals("Dark")){
-			upc ="681131913454";
+			upc ="U681131913454";
 		}
 
-		Log.d("Debug","send upc" + upc);
+		Log.d("Debug","send upc " + upc);
 		// Create an array of bytes. First byte will be the
 		// message length, and the next ones will be the message
 
@@ -253,51 +281,77 @@ public class DisplayCheckoutList extends Activity {
 
 						// If so, read them in and create a st ring
 
-						byte buf[] = new byte[bytes_avail];
-						in.read(buf);
+						byte Typebuf[] = new byte[1];
+                        in.read(Typebuf);
+						
+                        byte PCbuf[] = new byte[1];
+                        in.read(PCbuf);
+                        
+                         if (Typebuf[0] == 'I'){
+                                
+                                 byte idbuf[] = new byte[1];
+                                 in.read(idbuf);
+                                 //s  = new String(idbuf, "UTF-8");
+                                 r = String.valueOf(idbuf[0]);//    format("%4d", idbuf);
+                                
+                                 r = "USER ID: " + r;
+                                
+                                 byte CSbuf[] = new byte[1];
+                                 in.read(CSbuf);
+                                 ss = new String(CSbuf, "UTF-8");
+                         }
+                        
+                         else if (Typebuf[0] == 'U'){
+                                 byte UPCbuf[] = new byte[12];
+                                 in.read(UPCbuf);
+                                 s = new String(UPCbuf, 0, 12, "US-ASCII");
+                                Log.d("READ STRING",s);
+                                 
+                                 byte CSbuf[] = new byte[1];
+                                 in.read(CSbuf);
+                                 
+                                 
+                                ServiceHandler sh = new ServiceHandler();
 
-						final String s = new String(buf, 0, bytes_avail,
-								"US-ASCII");
+                                //Get item from server
+         						String upc = s;
+         						
+         						// Making a request to url and getting response
+         						String jsonStr = sh
+         								.makeServiceCall("http://162.243.133.20/items/" + upc);
+
+         						Log.d("Response: ", "Query item upc: " + upc);
+         						Log.d("Response: ", "> " + jsonStr);
+
+         						item = new Item();
+
+         						if (jsonStr != null) {
+         							try {
+         								JSONObject jsonObj = new JSONObject(jsonStr);
+
+         								// Getting JSON Array node
+         								json_item = jsonObj.getJSONObject("item");
+         								
+         								//JSONObject data = item.getJSONObject(0);
+
+         								item = new Item();
+         								item.setUpc(json_item.getString("upc"));
+         								item.setName(json_item.getString("name"));
+         								item.setDescription(json_item.getString("description"));
+         								item.setPrice(json_item.getInt("price"));
+         								item.setCategory(json_item.getString("category"));
+         								item.setImage(json_item.getString("image"));
+         								Log.d("Response: ","Adding to list: " + item.getName());
+         							} catch (JSONException e) {
+         								e.printStackTrace();
+         							}
+         						} else {
+         							Log.e("ServiceHandler",
+         									"Couldn't get any data from the url");
+         						}
+                         }
 						
 						
-
-						ServiceHandler sh = new ServiceHandler();
-
-						String upc = s.substring(1);
-						
-						// Making a request to url and getting response
-						String jsonStr = sh
-								.makeServiceCall("http://162.243.133.20/items/" + upc);
-
-						Log.d("Response: ", "Query item upc: " + upc);
-						Log.d("Response: ", "> " + jsonStr);
-
-						item = new Item();
-
-						if (jsonStr != null) {
-							try {
-								JSONObject jsonObj = new JSONObject(jsonStr);
-
-								// Getting JSON Array node
-								json_item = jsonObj.getJSONObject("item");
-								
-								//JSONObject data = item.getJSONObject(0);
-
-								item = new Item();
-								item.setUpc(json_item.getString("upc"));
-								item.setName(json_item.getString("name"));
-								item.setDescription(json_item.getString("description"));
-								item.setPrice(json_item.getInt("price"));
-								item.setCategory(json_item.getString("category"));
-								item.setImage(json_item.getString("image"));
-								Log.d("Response: ","Adding to list: " + item.getName());
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
-						} else {
-							Log.e("ServiceHandler",
-									"Couldn't get any data from the url");
-						}
 
 						// As explained in the tutorials, the GUI can not be
 						// updated in an asyncrhonous task. So, update the GUI
@@ -307,8 +361,12 @@ public class DisplayCheckoutList extends Activity {
 							@Override
 							public void run() {
 								Log.d("Debug", s);
-
-								String upc = s.substring(1);
+								
+								String upc = s;
+								
+                                final TextView tEv = (TextView) findViewById(R.id.textView2);
+                                tEv.setText(r);
+                               
 								if (upc.length() == 12) {
 									String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 									
