@@ -22,7 +22,6 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -79,6 +78,7 @@ public class DisplayCheckoutList extends Activity {
 
 		openSocket();
 		// sendMessage();
+		
 	}
 	
     public void sendMessageToDE2(View view) throws UnsupportedEncodingException{
@@ -158,6 +158,7 @@ public class DisplayCheckoutList extends Activity {
 		int i = (int)((Math.random()*100)%5);
 		String upc = "058779203061";
 		
+
 //		if ( selected.equals("Magnum")){
 //			upc = "U058779203061";
 //		}
@@ -188,6 +189,7 @@ public class DisplayCheckoutList extends Activity {
 		}
 		else if (  i == 4){
 			upc ="U681131913454";
+
 		}
 
 		
@@ -227,6 +229,7 @@ public class DisplayCheckoutList extends Activity {
 	}
 
 	// Construct an IP address from the four boxes
+	
 
 	public String getConnectToIP() {
 		String ip = "192.168.1.102";
@@ -292,20 +295,20 @@ public class DisplayCheckoutList extends Activity {
 					InputStream in = app.sock.getInputStream();
 
 					// See if any bytes are available from the Middleman
-
+					//Log.d("TCP", "none available");		
 					int bytes_avail = in.available();
 					if (bytes_avail > 0) {
 
-						// If so, read them in and create a st ring
-
+/*						// If so, read them in and create a st ring
+ 						Log.d("TCP", "0");		
 						byte Typebuf[] = new byte[1];
                         in.read(Typebuf);
-						
+ 						Log.d("TCP", "1");						
                         byte PCbuf[] = new byte[1];
                         in.read(PCbuf);
-                        
+ 						Log.d("TCP", "Typebuf "+Typebuf[0]);     
                          if (Typebuf[0] == 'I'){
-                                
+      						Log.d("TCP", "I");		
                                  byte idbuf[] = new byte[1];
                                  in.read(idbuf);
                                  //s  = new String(idbuf, "UTF-8");
@@ -319,17 +322,24 @@ public class DisplayCheckoutList extends Activity {
                          }
                         
                          else if (Typebuf[0] == 'U'){
+      						Log.d("TCP", "U");		
                                  byte UPCbuf[] = new byte[12];
                                  in.read(UPCbuf);
                                  s = new String(UPCbuf, 0, 12, "US-ASCII");
                                 Log.d("READ STRING",s);
                                  
                                  byte CSbuf[] = new byte[1];
-                                 in.read(CSbuf);
-                                 
+                                 in.read(CSbuf);*/
+
+//***********************************************************//
+							if (true){
+								byte UPCbuf[] = new byte[13];
+							    in.read(UPCbuf);
+                                s = new String(UPCbuf, 1, 12, "US-ASCII");
+//***********************************************************//
                                  
                                 ServiceHandler sh = new ServiceHandler();
-
+                                
                                 //Get item from server
          						String upc = s;
          						
@@ -387,9 +397,7 @@ public class DisplayCheckoutList extends Activity {
 								if (upc.length() == 12) {
 									String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
 									
-									if (itemExists(upc)){
-									}
-									else {
+									if (!itemExists(upc)){
 										HistoryItem hi = new HistoryItem(upc, item.getPrice(), currentDate, 1);
 										checkoutList.add(hi);
 										names.add(item.getName());

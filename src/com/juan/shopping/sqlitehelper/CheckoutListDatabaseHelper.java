@@ -249,7 +249,7 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		int i = 0;
 		float tempPrice = 0;
 
-		String selectQuery = "SELECT price,quantity,rid,date FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_RID;
+		String selectQuery = "SELECT price,quantity,rid,date FROM " + TABLE_CHECKOUT_LIST;
 
 		Log.e(LOG, selectQuery);
 
@@ -260,14 +260,16 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				ExpensiveListItem item = new ExpensiveListItem();
-				item.setTotalPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)*c.getInt(c.getColumnIndex(KEY_QUANTITY))));
+				float quantity = c.getInt(c.getColumnIndex(KEY_QUANTITY));
+				item.setTotalPrice(c.getFloat(c.getColumnIndex(KEY_PRICE))*quantity);
 				item.setRid(c.getInt(c.getColumnIndex(KEY_RID)));
 				item.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
 				listTemp.add(item);
 			} while (c.moveToNext());
 		}
 		
-		for(i = 1; i <= this.getMaxRid(); i++ ){
+		for(i = 1; i <= getMaxRid(); i++ ){
+			tempPrice = 0;
 			ExpensiveListItem item = new ExpensiveListItem();
 			for(ExpensiveListItem listitem : listTemp){
 				if(listitem.getRid() == i){
