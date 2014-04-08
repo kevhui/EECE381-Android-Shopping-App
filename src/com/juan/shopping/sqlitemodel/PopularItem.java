@@ -1,7 +1,7 @@
 package com.juan.shopping.sqlitemodel;
 
 
-public class AveragePopularItem {
+public class PopularItem {
 
 	String upc;
 	int quantity;
@@ -9,10 +9,10 @@ public class AveragePopularItem {
 	//TODO: dont think i need the constructors anymore
 	
 	// constructors
-	public AveragePopularItem(){
+	public PopularItem(){
 	}
 	
-	public AveragePopularItem(String upc, float price, String date, int quantity) {
+	public PopularItem(String upc, int quantity) {
 		this.upc = upc;
 		this.quantity = quantity;
 	}

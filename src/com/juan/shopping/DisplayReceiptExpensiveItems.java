@@ -3,9 +3,7 @@ package com.juan.shopping;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -14,14 +12,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -29,28 +22,32 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
+import com.juan.shopping.sqlitemodel.ExpensiveListItem;
 import com.juan.shopping.sqlitemodel.HistoryItem;
-import com.juan.shopping.sqlitemodel.Item;
 
-public class DisplayReceiptItems extends ListActivity {
+public class DisplayReceiptExpensiveItems extends ListActivity {
 
 	private List<HistoryItem> itemFilteredList;
 	private List<String> names;
 	private HistoryItem clickedItem;
-	private NumberPicker np;
-	private String date;
+	private ExpensiveListItem eItem;
+	private String expensive;
+	private String total;
 	private ArrayAdapter<String> adapter;
+	ListView list;
+	TextView tv;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
+		setContentView(R.layout.expensive_list);
 
 		Intent intent = getIntent();
-		date  = intent.getStringExtra("com.juan.shopping.DATE");
+		expensive  = intent.getStringExtra("com.juan.shopping.EXPENSIVE");
+		total = intent.getStringExtra("com.juan.shopping.TOTAL");
 
-		setTitle(date);
+		setTitle(expensive);
 
 		names = new ArrayList<String>();
 
@@ -58,7 +55,7 @@ public class DisplayReceiptItems extends ListActivity {
 		CheckoutListDatabaseHelper cdb;
 
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
-		itemFilteredList = cdb.getItemsByDate(date);
+		itemFilteredList = cdb.getItemsByDate(expensive);
 		cdb.closeDB();
 		
 		StoreDatabaseHelper db;
@@ -67,12 +64,16 @@ public class DisplayReceiptItems extends ListActivity {
 			names.add(db.getItem(item.getUPC()).getName());
 		}
 		db.closeDB();
+		
+		list = (ListView) findViewById(android.R.id.list);
+		tv = (TextView) findViewById(R.id.TOTAL_PRICE_EXPENSIVE);
+		tv.setText("TOTAL: " + total);
 
 		// Display the items
 		adapter = new ArrayAdapter<String>(this,
-				R.layout.history_list, R.id.historyList, names);
+				R.layout.list_items, R.id.itemName, names);
 
-		setListAdapter(adapter);
+		list.setAdapter(adapter);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 

@@ -9,10 +9,13 @@
         android:id="@+id/action_average_price" 
         android:showAsAction="never"
         android:title="@string/action_average_price"/>
-
     <item 
         android:id="@+id/action_date" 
         android:showAsAction="never"
         android:title="@string/action_date"/>
+    <item 
+        android:id="@+id/action_expensive" 
+        android:showAsAction="never"
+        android:title="@string/action_expensive"/>
 
 </menu>
