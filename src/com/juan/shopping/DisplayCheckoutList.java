@@ -184,7 +184,7 @@ public class DisplayCheckoutList extends Activity {
 	// Construct an IP address from the four boxes
 
 	public String getConnectToIP() {
-		String ip = "192.168.1.101";
+		String ip = "192.168.1.102";
 		return ip;
 	}
 

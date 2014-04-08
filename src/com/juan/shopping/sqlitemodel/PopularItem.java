@@ -12,7 +12,7 @@ public class PopularItem {
 	public PopularItem(){
 	}
 	
-	public PopularItem(String upc, float price, String date, int quantity) {
+	public PopularItem(String upc, int quantity) {
 		this.upc = upc;
 		this.quantity = quantity;
 	}

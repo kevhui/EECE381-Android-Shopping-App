@@ -213,31 +213,27 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		if (c.moveToFirst()) {
 			do {
 				PopularItem item = new PopularItem();
-				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
 				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
+				item.setQuantity(c.getInt(c.getColumnIndex("SUM("+KEY_QUANTITY+")")));
 				quantities.add(item);
 			} while (c.moveToNext());
 		}
-
 		return quantities;
 	}
 	
 	public List<AverageListItem> getItemByAverage() {
 		List<AverageListItem> quantities = new ArrayList<AverageListItem>();
-
 		String selectQuery = "SELECT SUM(quantity),SUM(price),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
-
 		Log.e(LOG, selectQuery);
-
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor c = db.rawQuery(selectQuery, null);
-
+		float maxRid = getMaxRid();
 		// loop through all rows and add to list
 		if (c.moveToFirst()) {
 			do {
 				AverageListItem item = new AverageListItem();
-				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)/this.getMaxRid()));
-				item.setAveragePrice(c.getFloat(c.getColumnIndex(KEY_PRICE)/this.getMaxRid()));
+				item.setQuantity(c.getInt(c.getColumnIndex("SUM("+KEY_QUANTITY+")"))/maxRid);
+				item.setAveragePrice(c.getFloat(c.getColumnIndex("SUM("+KEY_PRICE+")"))/maxRid);
 				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
 				quantities.add(item);
 			} while (c.moveToNext());

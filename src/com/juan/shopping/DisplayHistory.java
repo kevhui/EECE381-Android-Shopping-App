@@ -47,7 +47,7 @@ public class DisplayHistory extends ListActivity {
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 		
-		flagview = 0;
+		flagview = 2;
 		expenses = new ArrayList<ExpensiveListItem>();
 		averages = new ArrayList<AverageListItem>();
 		popular = new ArrayList<PopularItem>();
@@ -149,11 +149,11 @@ public class DisplayHistory extends ListActivity {
 				ImageView aiv = (ImageView) popupView.findViewById(R.id.ivItemImageAverage);
 				
 				atvN.setText("Name: " + aNames.get(position));
-				atvQ.setText("Average Quantity: " + Integer.toString(averages.get(position).getQuantity()));
+				atvQ.setText("Average Quantity: " + String.format("%.2f", averages.get(position).getQuantity()));
 				atvP.setText("Average Price: " + "$" + String.format("%.2f", averages.get(position).getAveragePrice()));
 				
 				// Display the picture
-				int aimageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + pclickedItem.getUPC(), null,null);
+				int aimageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + aclickedItem.getUPC(), null,null);
 				aiv.setImageResource(aimageId);
 
 				// Disable background clicking
@@ -292,6 +292,7 @@ public class DisplayHistory extends ListActivity {
 
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
+		
 		return average;
 	}
 	

@@ -4,7 +4,7 @@ package com.juan.shopping.sqlitemodel;
 public class AverageListItem {
 
 	String upc;
-	int quantity;
+	float quantity;
 	float averagePrice;
 	
 	//TODO: dont think i need the constructors anymore
@@ -29,11 +29,11 @@ public class AverageListItem {
 		this.upc = upc;
 	}
 
-	public int getQuantity() {
+	public float getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(float quantity) {
 		this.quantity = quantity;
 	}
 	
