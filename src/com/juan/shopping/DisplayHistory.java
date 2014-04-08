@@ -36,12 +36,12 @@ public class DisplayHistory extends ListActivity {
 	private PopularItem pclickedItem;
 	private AverageListItem aclickedItem;
 	private ArrayAdapter<String> adapter;
+	private List<String> datesList;
 	private int flagview;
 	private List<ExpensiveListItem> expenses;
 	private List<AverageListItem> averages;
 	private List<PopularItem> popular;
-	List<String> pNames;
-	List<String> aNames;
+	private List<String> names;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -51,10 +51,12 @@ public class DisplayHistory extends ListActivity {
 		expenses = new ArrayList<ExpensiveListItem>();
 		averages = new ArrayList<AverageListItem>();
 		popular = new ArrayList<PopularItem>();
+		names = new ArrayList<String>();
+		datesList = new ArrayList<String>();
 
 		CheckoutListDatabaseHelper db;
 		db = new CheckoutListDatabaseHelper(getApplicationContext());
-		List<String> datesList = db.getAllDates();
+		datesList = db.getAllDates();
 		db.closeDB();
 		
 		Log.d("DisplayHistory", "size: " + datesList.size());
@@ -90,7 +92,7 @@ public class DisplayHistory extends ListActivity {
 				TextView tvQ = (TextView) popupView.findViewById(R.id.tvItemQuantityPopular);
 				ImageView iv = (ImageView) popupView.findViewById(R.id.ivItemImagePopular);
 				
-				tvN.setText("Name: " + pNames.get(position));
+				tvN.setText("Name: " + names.get(position));
 				tvQ.setText("Quantity: " + Integer.toString(popular.get(position).getQuantity()));
 				
 				// Display the picture
@@ -148,7 +150,7 @@ public class DisplayHistory extends ListActivity {
 				TextView atvP = (TextView) popupView.findViewById(R.id.tvItemPriceAverage);
 				ImageView aiv = (ImageView) popupView.findViewById(R.id.ivItemImageAverage);
 				
-				atvN.setText("Name: " + aNames.get(position));
+				atvN.setText("Name: " + names.get(position));
 				atvQ.setText("Average Quantity: " + String.format("%.2f", averages.get(position).getQuantity()));
 				atvP.setText("Average Price: " + "$" + String.format("%.2f", averages.get(position).getAveragePrice()));
 				
@@ -249,7 +251,7 @@ public class DisplayHistory extends ListActivity {
 	}
 	
 	private List<PopularItem> optionsPopular(){
-		pNames = new ArrayList<String>();
+		names.clear();
 		
 		CheckoutListDatabaseHelper cdb;
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
@@ -259,12 +261,12 @@ public class DisplayHistory extends ListActivity {
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
 		for (PopularItem item : popular) {
-			pNames.add(db.getItem(item.getUPC()).getName());
+			names.add(db.getItem(item.getUPC()).getName());
 		}
 		db.closeDB();
 
 		adapter = new ArrayAdapter<String>(this,
-				R.layout.history_category, R.id.historyCategory, pNames);
+				R.layout.history_category, R.id.historyCategory, names);
 
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -273,7 +275,7 @@ public class DisplayHistory extends ListActivity {
 	}
 	
 	private List<AverageListItem> optionsAverage(){
-		aNames = new ArrayList<String>();
+		names.clear();
 		
 		CheckoutListDatabaseHelper cdb;
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
@@ -283,12 +285,12 @@ public class DisplayHistory extends ListActivity {
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
 		for (AverageListItem item : average	) {
-			aNames.add(db.getItem(item.getUPC()).getName());
+			names.add(db.getItem(item.getUPC()).getName());
 		}
 		db.closeDB();
 
 		adapter = new ArrayAdapter<String>(this,
-				R.layout.history_category, R.id.historyCategory, aNames);
+				R.layout.history_category, R.id.historyCategory, names);
 
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
@@ -297,9 +299,10 @@ public class DisplayHistory extends ListActivity {
 	}
 	
 	private void optionsDate(){
+		datesList.clear();
 		CheckoutListDatabaseHelper db;
 		db = new CheckoutListDatabaseHelper(getApplicationContext());
-		List<String> datesList = db.getAllDates();
+		datesList = db.getAllDates();
 		db.closeDB();
 
 		adapter = new ArrayAdapter<String>(this,
@@ -310,7 +313,7 @@ public class DisplayHistory extends ListActivity {
 	}
 	
 	private List<ExpensiveListItem> optionsItemExpenses(){
-		List<String> eDatesList = new ArrayList<String>();
+		datesList.clear();
 		
 		CheckoutListDatabaseHelper cdb;
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
@@ -319,11 +322,11 @@ public class DisplayHistory extends ListActivity {
 		
 
 		for (ExpensiveListItem item : expense) {
-			eDatesList.add(item.getDate());
+			datesList.add(item.getDate());
 		}
 
 		adapter = new ArrayAdapter<String>(this,
-				R.layout.history_category, R.id.historyCategory, eDatesList);
+				R.layout.history_category, R.id.historyCategory, datesList);
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		
