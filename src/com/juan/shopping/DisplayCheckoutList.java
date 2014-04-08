@@ -150,30 +150,47 @@ public class DisplayCheckoutList extends Activity {
 		MyApplication app = (MyApplication) getApplication();
 		// Get made up upc
 
-		RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup1);
-		RadioButton selectRadio = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
-		String selected = selectRadio.getText().toString();
+//		RadioGroup rg = (RadioGroup) findViewById(R.id.radioGroup1);
+//		RadioButton selectRadio = (RadioButton) findViewById(rg.getCheckedRadioButtonId());
+//		String selected = selectRadio.getText().toString();
 		
 		
-		//int i = (int)((Math.random()*100)%2);
+		int i = (int)((Math.random()*100)%5);
 		String upc = "058779203061";
 		
-		if ( selected.equals("Magnum")){
+//		if ( selected.equals("Magnum")){
+//			upc = "U058779203061";
+//		}
+//		else if ( selected.equals("Peach")){
+//			upc = "U058779278090";
+//		}
+//		else if ( selected.equals("Banana")){
+//			upc = "U055000892957";
+//		}
+//		else if ( selected.equals("Vanilla")){
+//			upc = "U681131913461";
+//		}
+//		else if ( selected.equals("Dark")){
+//			upc ="U681131913454";
+//		}
+
+		if ( i == 0){
 			upc = "U058779203061";
 		}
-		else if ( selected.equals("Peach")){
+		else if (  i == 1){
 			upc = "U058779278090";
 		}
-		else if ( selected.equals("Banana")){
+		else if (  i == 2){
 			upc = "U055000892957";
 		}
-		else if ( selected.equals("Vanilla")){
+		else if (  i == 3){
 			upc = "U681131913461";
 		}
-		else if ( selected.equals("Dark")){
+		else if (  i == 4){
 			upc ="U681131913454";
 		}
 
+		
 		Log.d("Debug","send upc " + upc);
 		// Create an array of bytes. First byte will be the
 		// message length, and the next ones will be the message
@@ -435,7 +452,7 @@ public class DisplayCheckoutList extends Activity {
 	
 	private boolean itemExists(String upc){
 		for (HistoryItem item : checkoutList) {
-			if(item.getUPC() == upc){
+			if(item.getUPC().equals(upc)){
 				item.addQuantity(1);
 				return true;
 			}
