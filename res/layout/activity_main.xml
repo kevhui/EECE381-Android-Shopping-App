@@ -14,6 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/bEditShoppingList"
         android:layout_below="@+id/bEditShoppingList"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/buttons"
         android:onClick="onClickViewShoppingList"
         android:text="View Shopping List" />
 
@@ -23,6 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/bViewShoppingList"
         android:layout_below="@+id/bViewShoppingList"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/buttons"
         android:onClick="onClickCheckoutList"
         android:text="Checkout List" />
 
@@ -32,17 +38,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/bCheckoutList"
         android:layout_below="@+id/bCheckoutList"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/buttons"
         android:onClick="onClickHistory"
         android:text="Receipts" />
-
-    <Button
-        android:id="@+id/ConnectToDE2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/bScanBarcode"
-        android:layout_below="@+id/bScanBarcode"
-        android:onClick="onClickConnectToDE2"
-        android:text="Connect2DE2" />
 
     <Button
         android:id="@+id/bScanBarcode"
@@ -50,15 +50,21 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/bHistory"
         android:layout_below="@+id/bHistory"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/buttons"
         android:onClick="onClickBarcodeScanner"
         android:text="Scan Barcode" />
-    
-	<Button
+
+    <Button
         android:id="@+id/bRecommendedItems"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/ConnectToDE2"
-        android:layout_below="@id/ConnectToDE2"
+        android:layout_alignLeft="@+id/bScanBarcode"
+        android:layout_below="@+id/bScanBarcode"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/buttons"
         android:onClick="onClickRecommendedItems"
         android:text="Recommended Items" />
 
@@ -68,7 +74,9 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/title"
         android:layout_below="@+id/subtext"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/buttons"
         android:onClick="onClickEditShoppingList"
         android:text="Edit Shopping List" />
 
@@ -88,6 +96,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="44dp"
+        android:gravity="center"
         android:text="@string/app_name"
         android:textSize="30dp" />
 

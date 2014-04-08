@@ -375,7 +375,7 @@ public class DisplayCheckoutList extends Activity {
 					int bytes_avail = in.available();
 					if (bytes_avail > 0) {
 
-/*						// If so, read them in and create a st ring
+						// If so, read them in and create a st ring
  						Log.d("TCP", "0");		
 						byte Typebuf[] = new byte[1];
                         in.read(Typebuf);
@@ -405,13 +405,13 @@ public class DisplayCheckoutList extends Activity {
                                 Log.d("READ STRING",s);
                                  
                                  byte CSbuf[] = new byte[1];
-                                 in.read(CSbuf);*/
+                                 in.read(CSbuf);
 
 //***********************************************************//
-							if (true){
-								byte UPCbuf[] = new byte[13];
-							    in.read(UPCbuf);
-                                s = new String(UPCbuf, 1, 12, "US-ASCII");
+//							if (true){
+//								byte UPCbuf[] = new byte[13];
+//							    in.read(UPCbuf);
+//                                s = new String(UPCbuf, 1, 12, "US-ASCII");
 //***********************************************************//
                                  
                                 ServiceHandler sh = new ServiceHandler();

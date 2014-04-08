@@ -59,14 +59,6 @@
             android:text="Checkout"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/addItemButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:onClick="sendUpc"
-            android:text="ADD"
-            android:textSize="10sp" />
     </LinearLayout>
 
     <TextView

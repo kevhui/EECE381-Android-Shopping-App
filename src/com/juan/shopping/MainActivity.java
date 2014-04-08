@@ -3,8 +3,10 @@ package com.juan.shopping;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
@@ -17,9 +19,12 @@ public class MainActivity extends Activity {
 	CheckoutListDatabaseHelper historydb;
 	public SQLiteDatabase database;
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().setFormat(PixelFormat.RGBA_8888);
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
 		setContentView(R.layout.activity_main);
 
 		// Initialize databases if this is first time opening app

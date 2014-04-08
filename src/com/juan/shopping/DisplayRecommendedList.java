@@ -110,6 +110,7 @@ public class DisplayRecommendedList extends ListActivity {
 
 		//Find the Max similarity
 		Comparator<Map.Entry<String, Double>> comparator = new Comparator<Map.Entry<String, Double>>() {
+			@Override
 			public int compare(Map.Entry<String, Double> e1,
 					Map.Entry<String, Double> e2) {
 				return e1.getValue().compareTo(e2.getValue());
