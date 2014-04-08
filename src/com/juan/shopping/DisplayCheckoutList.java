@@ -23,14 +23,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
-import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.HistoryItem;
+import com.juan.shopping.sqlitemodel.Item;
 
 
 public class DisplayCheckoutList extends Activity {

@@ -21,12 +21,10 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.ExpensiveListItem;
 import com.juan.shopping.sqlitemodel.HistoryItem;
 import com.juan.shopping.sqlitemodel.Item;

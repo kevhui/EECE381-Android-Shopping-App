@@ -40,7 +40,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 
 public class DisplayItems extends ListActivity {

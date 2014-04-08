@@ -1,12 +1,6 @@
 package com.juan.shopping;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -15,16 +9,12 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 
 public class DisplayCategories extends ListActivity {
 

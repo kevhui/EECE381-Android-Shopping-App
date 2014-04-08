@@ -19,7 +19,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class StoreDatabaseHelper extends SQLiteOpenHelper {
+public class CopyOfStoreDatabaseHelper extends SQLiteOpenHelper {
 
 	// Logcat tag
 	private static final String LOG = "DatabaseHelper";
@@ -45,7 +45,7 @@ public class StoreDatabaseHelper extends SQLiteOpenHelper {
 
 	private final Context context;
 
-	public StoreDatabaseHelper(Context context) {
+	public CopyOfStoreDatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.context = context;
 		createDataBase();

@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,9 +31,7 @@ import android.widget.NumberPicker;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.juan.shopping.DisplayItems.GetImage;
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.Shopping_list_item;
 

@@ -8,12 +8,11 @@ import android.view.View;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 
 public class MainActivity extends Activity {
 
 	// Database Helper
-	StoreDatabaseHelper storedb;
+	//StoreDatabaseHelper storedb;
 	ShoppingListDatabaseHelper shoppingListdb;
 	CheckoutListDatabaseHelper historydb;
 	public SQLiteDatabase database;
@@ -24,8 +23,8 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		// Initialize databases if this is first time opening app
-		storedb = new StoreDatabaseHelper(getApplicationContext());
-		storedb.closeDB();
+		//storedb = new StoreDatabaseHelper(getApplicationContext());
+		//storedb.closeDB();
 		shoppingListdb = new ShoppingListDatabaseHelper(getApplicationContext());
 		shoppingListdb.closeDB();
 		historydb = new CheckoutListDatabaseHelper(getApplicationContext());

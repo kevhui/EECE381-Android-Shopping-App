@@ -6,9 +6,7 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -18,14 +16,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.NumberPicker;
@@ -33,8 +26,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.HistoryItem;
 import com.juan.shopping.sqlitemodel.Item;
 

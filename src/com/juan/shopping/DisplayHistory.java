@@ -26,15 +26,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
-import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.AverageListItem;
 import com.juan.shopping.sqlitemodel.ExpensiveListItem;
 import com.juan.shopping.sqlitemodel.Item;
 import com.juan.shopping.sqlitemodel.PopularItem;
-import com.juan.shopping.sqlitemodel.HistoryItem;
 
 public class DisplayHistory extends ListActivity {
 
