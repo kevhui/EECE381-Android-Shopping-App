@@ -229,7 +229,7 @@ public class DisplayCheckoutList extends Activity {
 	
 
 	public String getConnectToIP() {
-		String ip = "192.168.0.100";
+		String ip = "192.168.1.102";
 		return ip;
 	}
 

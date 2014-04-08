@@ -1,8 +1,10 @@
 package com.juan.shopping;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NavigableMap;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.json.JSONException;
@@ -66,8 +68,6 @@ public class DisplayHistory extends ListActivity {
 		datesList = db.getAllDates();
 		db.closeDB();
 
-		Log.d("DisplayHistory", "size: " + datesList.size());
-
 		adapter = new ArrayAdapter<String>(this, R.layout.history_category,
 				R.id.historyCategory, datesList);
 
@@ -85,6 +85,7 @@ public class DisplayHistory extends ListActivity {
 		switch (flagview) {
 		case 0:
 			pclickedItem = popular.get(position);
+			Log.d("DisplayHistory","position " + position);
 
 			layoutInflater = (LayoutInflater) getBaseContext()
 					.getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -251,7 +252,7 @@ public class DisplayHistory extends ListActivity {
 		case R.id.action_popular:
 			flagview = 0;
 			popular.clear();
-			popular = optionsPopular();
+			optionsPopular();
 			return true;
 		case R.id.action_average_price:
 			flagview = 1;
@@ -273,27 +274,39 @@ public class DisplayHistory extends ListActivity {
 	}
 
 	@SuppressWarnings("unchecked")
-	private List<PopularItem> optionsPopular() {
+	private void optionsPopular() {
 		names.clear();
 		upcList.clear();
 		CheckoutListDatabaseHelper cdb;
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
-		List<PopularItem> popular = cdb.getItemByPopularity();
+		popular = cdb.getItemByPopularity();
 		cdb.closeDB();
+		PopularItem pItem = new PopularItem();
 		
-		TreeMap<Integer, PopularItem> map = new TreeMap<Integer, PopularItem>();
+		TreeMap<Integer, String> map = new TreeMap<Integer, String>();
 		
 		for(PopularItem item : popular){
-			map.put(item.getQuantity(), item);
+			map.put(item.getQuantity(), item.getUPC());
 		}
 		
 		NavigableMap sortedPopular = map.descendingMap();
 
+		Set<Integer> keys = sortedPopular.keySet();
+		Iterator<Integer> it = keys.iterator();
+		popular.clear();
+		while(it.hasNext()){
+			Integer next = it.next();
+			upcList.add(sortedPopular.get(next).toString());
+			pItem = new PopularItem(sortedPopular.get(next).toString(), next);
+			Log.d("DisplayHistory","quantity: " + next);
+			Log.d("DisplayHistory","upc: " + pItem.getUPC());
+			popular.add(pItem);
+		}
 		// StoreDatabaseHelper db;
 		// db = new StoreDatabaseHelper(getApplicationContext());
-		for (PopularItem item : popular) {
-			upcList.add(item.getUPC());
-		}
+//		for (PopularItem item : popular) {
+//			upcList.add(item.getUPC());
+//		}
 		// db.closeDB();
 		//
 		// adapter = new ArrayAdapter<String>(this,
@@ -303,7 +316,6 @@ public class DisplayHistory extends ListActivity {
 		// adapter.notifyDataSetChanged();
 		//
 		new GetItems().execute(upcList);
-		return popular;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -312,12 +324,12 @@ public class DisplayHistory extends ListActivity {
 		upcList.clear();
 		CheckoutListDatabaseHelper cdb;
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
-		List<AverageListItem> average = cdb.getItemByAverage();
+		averages = cdb.getItemByAverage();
 		cdb.closeDB();
 
 		// StoreDatabaseHelper db;
 		// db = new StoreDatabaseHelper(getApplicationContext());
-		for (AverageListItem item : average) {
+		for (AverageListItem item : averages) {
 			upcList.add(item.getUPC());
 		}
 		// db.closeDB();
@@ -329,7 +341,7 @@ public class DisplayHistory extends ListActivity {
 		// adapter.notifyDataSetChanged();
 		//
 		new GetItems().execute(upcList);
-		return average;
+		return averages;
 	}
 
 	private void optionsDate() {
