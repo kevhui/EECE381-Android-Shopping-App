@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:weightSum="1.0" >
+
+        <ListView
+            android:id="@+id/LIST_OF_ITEMS_EXPENSIVE"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.81"
+            android:divider="#b5b5b5"
+            android:dividerHeight="1dp" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.19" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentBottom="true"
+        android:background="#000000"
+        android:orientation="horizontal"
+        android:weightSum="1.0" >
+
+        <TextView
+            android:id="@+id/TOTAL_PRICE_EXPENSIVE"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="0.9"
+            android:text="TOTAL"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+</RelativeLayout>

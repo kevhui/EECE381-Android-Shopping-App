@@ -96,7 +96,7 @@
                 android:value=".DisplayCategories" />
         </activity>
         <activity
-            android:name=".DisplayReceiptItems"
+            android:name=".DisplayReceiptDateItems"
             android:label="@string/app_name"
             android:parentActivityName=".DisplayHistory" >
             

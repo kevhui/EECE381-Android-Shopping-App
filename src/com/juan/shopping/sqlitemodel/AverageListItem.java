@@ -1,20 +1,22 @@
 package com.juan.shopping.sqlitemodel;
 
 
-public class AveragePopularItem {
+public class AverageListItem {
 
 	String upc;
 	int quantity;
+	float averagePrice;
 	
 	//TODO: dont think i need the constructors anymore
 	
 	// constructors
-	public AveragePopularItem(){
+	public AverageListItem(){
 	}
 	
-	public AveragePopularItem(String upc, float price, String date, int quantity) {
+	public AverageListItem(String upc, float averagePrice, int quantity) {
 		this.upc = upc;
 		this.quantity = quantity;
+		this.averagePrice = averagePrice;
 	}
 	
 	//Getters and Setters
@@ -33,6 +35,14 @@ public class AveragePopularItem {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+	
+	public float getAveragePrice() {
+		return averagePrice;
+	}
+
+	public void setAveragePrice(float averagePrice) {
+		this.averagePrice = averagePrice;
 	}
 
 }

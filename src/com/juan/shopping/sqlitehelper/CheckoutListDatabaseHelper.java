@@ -17,9 +17,11 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.juan.shopping.ServiceHandler;
+import com.juan.shopping.sqlitemodel.AverageListItem;
+import com.juan.shopping.sqlitemodel.ExpensiveListItem;
 import com.juan.shopping.sqlitemodel.HistoryItem;
 import com.juan.shopping.sqlitemodel.Item;
-import com.juan.shopping.sqlitemodel.AveragePopularItem;
+import com.juan.shopping.sqlitemodel.PopularItem;
 
 public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 
@@ -197,8 +199,8 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		return checkoutList;
 	}
 	
-	public List<AveragePopularItem> getItemByPopularity() {
-		List<AveragePopularItem> quantities = new ArrayList<AveragePopularItem>();
+	public List<PopularItem> getItemByPopularity() {
+		List<PopularItem> quantities = new ArrayList<PopularItem>();
 
 		String selectQuery = "SELECT SUM(quantity),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
 
@@ -210,7 +212,7 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		// loop through all rows and add to list
 		if (c.moveToFirst()) {
 			do {
-				AveragePopularItem item = new AveragePopularItem();
+				PopularItem item = new PopularItem();
 				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
 				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
 				quantities.add(item);
@@ -220,10 +222,10 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		return quantities;
 	}
 	
-	public List<AveragePopularItem> getItemByAverage() {
-		List<AveragePopularItem> quantities = new ArrayList<AveragePopularItem>();
+	public List<AverageListItem> getItemByAverage() {
+		List<AverageListItem> quantities = new ArrayList<AverageListItem>();
 
-		String selectQuery = "SELECT SUM(quantity),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
+		String selectQuery = "SELECT SUM(quantity),SUM(price),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
 
 		Log.e(LOG, selectQuery);
 
@@ -233,8 +235,9 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		// loop through all rows and add to list
 		if (c.moveToFirst()) {
 			do {
-				AveragePopularItem item = new AveragePopularItem();
-				item.setQuantity((c.getInt(c.getColumnIndex(KEY_QUANTITY))/this.getMaxRid()));
+				AverageListItem item = new AverageListItem();
+				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)/this.getMaxRid()));
+				item.setAveragePrice(c.getFloat(c.getColumnIndex(KEY_PRICE)/this.getMaxRid()));
 				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
 				quantities.add(item);
 			} while (c.moveToNext());
@@ -243,10 +246,13 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		return quantities;
 	}
 	
-	public List<AveragePopularItem> getItemExpensive() {
-		List<AveragePopularItem> quantities = new ArrayList<AveragePopularItem>();
+	public List<ExpensiveListItem> getItemExpensive() {
+		List<ExpensiveListItem> listTemp = new ArrayList<ExpensiveListItem>();
+		List<ExpensiveListItem> list = new ArrayList<ExpensiveListItem>();
+		int i = 0;
+		float tempPrice = 0;
 
-		String selectQuery = "SELECT SUM(quantity),upc FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_UPC;
+		String selectQuery = "SELECT price,quantity,rid,date FROM " + TABLE_CHECKOUT_LIST + " GROUP BY " + KEY_RID;
 
 		Log.e(LOG, selectQuery);
 
@@ -256,14 +262,28 @@ public class CheckoutListDatabaseHelper extends SQLiteOpenHelper {
 		// loop through all rows and add to list
 		if (c.moveToFirst()) {
 			do {
-				AveragePopularItem item = new AveragePopularItem();
-				item.setQuantity(c.getInt(c.getColumnIndex(KEY_QUANTITY)));
-				item.setUPC(c.getString(c.getColumnIndex(KEY_UPC)));
-				quantities.add(item);
+				ExpensiveListItem item = new ExpensiveListItem();
+				item.setTotalPrice(c.getFloat(c.getColumnIndex(KEY_PRICE)*c.getInt(c.getColumnIndex(KEY_QUANTITY))));
+				item.setRid(c.getInt(c.getColumnIndex(KEY_RID)));
+				item.setDate(c.getString(c.getColumnIndex(KEY_DATE)));
+				listTemp.add(item);
 			} while (c.moveToNext());
 		}
+		
+		for(i = 1; i <= this.getMaxRid(); i++ ){
+			ExpensiveListItem item = new ExpensiveListItem();
+			for(ExpensiveListItem listitem : listTemp){
+				if(listitem.getRid() == i){
+					tempPrice += listitem.getTotalPrice();
+					item.setRid(i);
+					item.setDate(listitem.getDate());
+				}
+			}
+			item.setTotalPrice(tempPrice);
+			list.add(item);
+		}
 
-		return quantities;
+		return list;
 	}
 
 	// Getting number of items in shopping list
