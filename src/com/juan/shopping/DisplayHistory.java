@@ -371,14 +371,30 @@ public class DisplayHistory extends ListActivity {
 
 	private List<ExpensiveListItem> optionsItemExpenses() {
 		datesList.clear();
+		ExpensiveListItem eItem = new ExpensiveListItem();
 
 		CheckoutListDatabaseHelper cdb;
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
-		List<ExpensiveListItem> expense = cdb.getItemExpensive();
+		expenses = cdb.getItemExpensive();
 		cdb.closeDB();
+		
+		TreeMap<Float, ExpensiveListItem> map = new TreeMap<Float, ExpensiveListItem>();
+		
+		for(ExpensiveListItem item : expenses){
+			map.put(item.getTotalPrice(), item);
+		}
+		
+		NavigableMap sortedExpenses = map.descendingMap();
 
-		for (ExpensiveListItem item : expense) {
-			datesList.add(item.getDate());
+		
+		Set<Float> keys = sortedExpenses.keySet();
+		Iterator<Float> it = keys.iterator();
+		expenses.clear();
+		while(it.hasNext()){
+			Float next = it.next();
+			eItem = (ExpensiveListItem) sortedExpenses.get(next);
+			expenses.add(eItem);
+			datesList.add(eItem.getDate());
 		}
 
 		adapter = new ArrayAdapter<String>(this, R.layout.history_category,
@@ -386,7 +402,7 @@ public class DisplayHistory extends ListActivity {
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
 
-		return expense;
+		return expenses;
 	}
 
 	class GetItems extends AsyncTask<List<String>, Void, List<Item>> {

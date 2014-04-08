@@ -18,6 +18,12 @@ public class ExpensiveListItem {
 		this.totalPrice = totalPrice;
 	}
 	
+	public ExpensiveListItem(int rid, float totalPrice, String date) {
+		this.rid = rid;
+		this.totalPrice = totalPrice;
+		this.date = date;
+	}
+	
 	//Getters and Setters
 
 	public int getRid() {
