@@ -25,5 +25,6 @@
     <string name="average_price">Average Price</string>
     <string name="popular_name">Name</string>
     <string name="popular_quantity">Popular Quantity</string>
+    <string name="checkout_warning">Lists do not match</string>
     
 </resources>

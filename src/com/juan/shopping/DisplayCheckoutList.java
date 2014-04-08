@@ -16,18 +16,29 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
+import com.juan.shopping.sqlitehelper.ShoppingListDatabaseHelper;
 import com.juan.shopping.sqlitemodel.HistoryItem;
 import com.juan.shopping.sqlitemodel.Item;
+import com.juan.shopping.sqlitemodel.Shopping_list_item;
 
 
 public class DisplayCheckoutList extends Activity {
@@ -122,24 +133,92 @@ public class DisplayCheckoutList extends Activity {
 	// Called when the user wants to send a message
 
 	public void sendMessage(View view) {
-		String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+		ShoppingListDatabaseHelper sdb = new ShoppingListDatabaseHelper(getApplicationContext());
+		List<Shopping_list_item> missingItems = sdb.getAllItems();
+		sdb.closeDB();
 		
-		CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());
-		for (HistoryItem item : checkoutList) {
-			item.setDate(currentDate);
-			item.setRid(cdb.getMaxRid() + 1);
+		for(HistoryItem hItem : checkoutList){
+			for(Shopping_list_item item : missingItems){
+				if(hItem.getUPC().equals(item.getUPC())){
+					if(hItem.getQuantity() >= item.getQuantity()){
+						missingItems.remove(item);	
+					}
+				}
+			}
 		}
-		for (HistoryItem item : checkoutList) {
-			cdb.addItem(item);
-			Log.d("Debug","upc = " + item.getUPC());
+		if(!missingItems.isEmpty()){
+			LayoutInflater layoutInflater = (LayoutInflater) getBaseContext()
+					.getSystemService(LAYOUT_INFLATER_SERVICE);
+
+			// Setup the popupView
+			View popupView = layoutInflater.inflate(R.layout.popup_checkout,
+					null);
+			final PopupWindow popupWindow = new PopupWindow(popupView,
+					LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			
+			Button btnConfirm = (Button) popupView.findViewById(R.id.bConfirmCheckout);
+			Button btnCancel = (Button) popupView.findViewById(R.id.bCancelCheckout);
+
+			TextView tv1 = (TextView) popupView.findViewById(R.id.tvCheckoutWarning);
+			tv1.setText("Warning: You are missing some items from your shopping list. Do you wish to continue?");
+			
+			// Show the popUp
+			popupWindow.update();
+			popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+			
+			btnConfirm.setOnClickListener(new Button.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+					
+					CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());
+					for (HistoryItem item : checkoutList) {
+						item.setDate(currentDate);
+						item.setRid(cdb.getMaxRid() + 1);
+					}
+					for (HistoryItem item : checkoutList) {
+						cdb.addItem(item);
+						Log.d("Debug","upc = " + item.getUPC());
+					}
+					cdb.closeDB();
+					
+					totalPrice = 0;
+					tv.setText("$" + String.format("%.2f", totalPrice));
+					names.clear();
+					checkoutList.clear();
+					adapter.notifyDataSetChanged();
+					popupWindow.dismiss();
+				}
+			});
+			
+			btnCancel.setOnClickListener(new Button.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+
+					popupWindow.dismiss();
+				}
+			});
 		}
-		cdb.closeDB();
-		
-		totalPrice = 0;
-		tv.setText("$" + String.format("%.2f", totalPrice));
-		names.clear();
-		checkoutList.clear();
-		adapter.notifyDataSetChanged();
+		else{
+			String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+			
+			CheckoutListDatabaseHelper cdb = new CheckoutListDatabaseHelper(getApplicationContext());
+			for (HistoryItem item : checkoutList) {
+				item.setDate(currentDate);
+				item.setRid(cdb.getMaxRid() + 1);
+			}
+			for (HistoryItem item : checkoutList) {
+				cdb.addItem(item);
+				Log.d("Debug","upc = " + item.getUPC());
+			}
+			cdb.closeDB();
+			
+			totalPrice = 0;
+			tv.setText("$" + String.format("%.2f", totalPrice));
+			names.clear();
+			checkoutList.clear();
+			adapter.notifyDataSetChanged();
+		}
 	}
 	
 
