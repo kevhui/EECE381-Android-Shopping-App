@@ -2,6 +2,8 @@ package com.juan.shopping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -278,6 +280,14 @@ public class DisplayHistory extends ListActivity {
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
 		List<PopularItem> popular = cdb.getItemByPopularity();
 		cdb.closeDB();
+		
+		TreeMap<Integer, PopularItem> map = new TreeMap<Integer, PopularItem>();
+		
+		for(PopularItem item : popular){
+			map.put(item.getQuantity(), item);
+		}
+		
+		NavigableMap sortedPopular = map.descendingMap();
 
 		// StoreDatabaseHelper db;
 		// db = new StoreDatabaseHelper(getApplicationContext());
