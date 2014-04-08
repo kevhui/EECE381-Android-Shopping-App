@@ -2,6 +2,8 @@ package com.juan.shopping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -22,14 +24,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitehelper.StoreDatabaseHelper;
 import com.juan.shopping.sqlitemodel.AverageListItem;
 import com.juan.shopping.sqlitemodel.ExpensiveListItem;
 import com.juan.shopping.sqlitemodel.PopularItem;
-import com.juan.shopping.sqlitemodel.HistoryItem;
 
 public class DisplayHistory extends ListActivity {
 	
@@ -257,6 +257,14 @@ public class DisplayHistory extends ListActivity {
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
 		List<PopularItem> popular = cdb.getItemByPopularity();
 		cdb.closeDB();
+		
+		TreeMap<Integer, PopularItem> map = new TreeMap<Integer, PopularItem>();
+		
+		for(PopularItem item : popular){
+			map.put(item.getQuantity(), item);
+		}
+		
+		NavigableMap sortedPopular = map.descendingMap();
 		
 		StoreDatabaseHelper db;
 		db = new StoreDatabaseHelper(getApplicationContext());
