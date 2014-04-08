@@ -32,7 +32,6 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 	private List<String> names;
 	private HistoryItem clickedItem;
 	private ExpensiveListItem eItem;
-	private NumberPicker np;
 	private String expensive;
 	private String total;
 	private ArrayAdapter<String> adapter;
@@ -65,7 +64,7 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 		}
 		db.closeDB();
 		
-		ListView list = (ListView) findViewById(R.id.LIST_OF_ITEMS);
+		ListView list = (ListView) findViewById(R.id.LIST_OF_ITEMS_EXPENSIVE);
 		TextView tv = (TextView) findViewById(R.id.TOTAL_PRICE_EXPENSIVE);
 		tv.setText("TOTAL: " + total);
 
