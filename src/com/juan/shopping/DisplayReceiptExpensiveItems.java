@@ -118,7 +118,7 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 		TextView tvQ = (TextView) popupView.findViewById(R.id.tvItemQuantityCheckoutList);
 		TextView tvP = (TextView) popupView.findViewById(R.id.tvItemPriceCheckoutList);
 		TextView tvD = (TextView) popupView.findViewById(R.id.tvItemDateCheckoutList);
-		ImageView iv = (ImageView) popupView.findViewById(R.id.ivItemImageCheckoutList);
+		iv = (ImageView) popupView.findViewById(R.id.ivItemImageCheckoutList);
 		
 		Log.d("DisplayHistory",
 				"setViews");
@@ -246,12 +246,52 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 		// in doInBackground will be executed in a separate thread
 
 		@Override
-		protected Bitmap doInBackground(String... url_array) {
+		protected Bitmap doInBackground(String... upc) {
+		
+			Log.i("MainActivity", "Inside the asynchronous task");
+
+			// Creating service handler class instance
+			ServiceHandler sh = new ServiceHandler();
+
+			// Making a request to url and getting response
+			String jsonStr = sh.makeServiceCall("http://162.243.133.20/items/"+upc[0]);
+
+			Log.d("Response: ", "> " + jsonStr);
+
+			Item tempItem  = new Item();
+
+			if (jsonStr != null) {
+				try {
+					JSONObject jsonObj = new JSONObject(jsonStr);
+
+					JSONObject data = jsonObj.getJSONObject("item");
+
+					tempItem = new Item();
+					Log.d("Response: ", "Setting the item.image");
+					tempItem.setUpc(data.getString("upc"));
+					tempItem.setName(data.getString("name"));
+					tempItem.setDescription(data.getString("description"));
+					tempItem.setPrice(data.getInt("price"));
+					tempItem.setCategory(data.getString("category"));
+					tempItem.setImage(data.getString("image"));
+					Log.d("Response: ", "Adding to list: " + tempItem.getName());
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else {
+				Log.e("ServiceHandler", "Couldn't get any data from the url");
+			}
+
+			
 			URL url;
 			Log.i("DisplayItem", "Inside the asynchronous task");
 
+			
+			
 			try {
-				url = new URL(url_array[0]);
+				url = new URL(tempItem.getImage());
+				Log.i("Image URL", tempItem.getImage());
 				HttpURLConnection connection = (HttpURLConnection) url
 						.openConnection();
 				connection.setDoInput(true);

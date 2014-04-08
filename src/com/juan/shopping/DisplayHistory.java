@@ -108,7 +108,7 @@ public class DisplayHistory extends ListActivity {
 					.findViewById(R.id.tvItemNamePopular);
 			TextView tvQ = (TextView) popupView
 					.findViewById(R.id.tvItemQuantityPopular);
-			ImageView iv = (ImageView) popupView
+			iv = (ImageView) popupView
 					.findViewById(R.id.ivItemImagePopular);
 
 			tvN.setText("Name: " + names.get(position));
@@ -473,70 +473,79 @@ public class DisplayHistory extends ListActivity {
 	}
 	
 	
-	class GetImage extends AsyncTask<String, Void, Bitmap> {
+		class GetImage extends AsyncTask<String, Void, Bitmap> {
 
-		// This is the "guts" of the asynchronus task. The code
-		// in doInBackground will be executed in a separate thread
+			// This is the "guts" of the asynchronus task. The code
+			// in doInBackground will be executed in a separate thread
 
-		@Override
-		protected Bitmap doInBackground(String... upc) {
-		
-			Log.i("MainActivity", "Inside the asynchronous task");
+			@Override
+			protected Bitmap doInBackground(String... upc) {
+			
+				Log.i("MainActivity", "Inside the asynchronous task");
 
-			// Creating service handler class instance
-			ServiceHandler sh = new ServiceHandler();
+				// Creating service handler class instance
+				ServiceHandler sh = new ServiceHandler();
 
-			// Making a request to url and getting response
-			String jsonStr = sh.makeServiceCall("http://162.243.133.20/items/"+upc);
+				// Making a request to url and getting response
+				String jsonStr = sh.makeServiceCall("http://162.243.133.20/items/"+upc[0]);
 
-			Log.d("Response: ", "> " + jsonStr);
+				Log.d("Response: ", "> " + jsonStr);
 
-			Item tempItem  = new Item();
+				Item tempItem  = new Item();
 
-			if (jsonStr != null) {
-				try {
-					JSONObject jsonObj = new JSONObject(jsonStr);
+				if (jsonStr != null) {
+					try {
+						JSONObject jsonObj = new JSONObject(jsonStr);
 
-					JSONObject data = item.getJSONObject("item");
+						JSONObject data = jsonObj.getJSONObject("item");
 
-					tempItem = new Item();
-					tempItem.setImage(data.getString("image"));
-					Log.d("Response: ", "Adding to list: " + tempItem.getName());
+						tempItem = new Item();
+						Log.d("Response: ", "Setting the item.image");
+						tempItem.setUpc(data.getString("upc"));
+						tempItem.setName(data.getString("name"));
+						tempItem.setDescription(data.getString("description"));
+						tempItem.setPrice(data.getInt("price"));
+						tempItem.setCategory(data.getString("category"));
+						tempItem.setImage(data.getString("image"));
+						Log.d("Response: ", "Adding to list: " + tempItem.getName());
 
-				} catch (JSONException e) {
-					e.printStackTrace();
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				} else {
+					Log.e("ServiceHandler", "Couldn't get any data from the url");
 				}
-			} else {
-				Log.e("ServiceHandler", "Couldn't get any data from the url");
+
+				
+				URL url;
+				Log.i("DisplayItem", "Inside the asynchronous task");
+
+				
+				
+				try {
+					url = new URL(tempItem.getImage());
+					Log.i("Image URL", tempItem.getImage());
+					HttpURLConnection connection = (HttpURLConnection) url
+							.openConnection();
+					connection.setDoInput(true);
+					connection.connect();
+
+					Log.i("DisplayItem", "Successfully opened the web page");
+
+					InputStream input = connection.getInputStream();
+					Bitmap bitmap = BitmapFactory.decodeStream(input);
+					input.close();
+					
+					Log.i("Displayhistory", "Successfully loaded image");
+
+					return bitmap;
+
+				} catch (IOException e) {
+					e.printStackTrace();
+					return null;
+				}
+
 			}
-
-			
-			URL url;
-			Log.i("DisplayItem", "Inside the asynchronous task");
-
-			
-			
-			try {
-				url = new URL(tempItem.getImage());
-				HttpURLConnection connection = (HttpURLConnection) url
-						.openConnection();
-				connection.setDoInput(true);
-				connection.connect();
-
-				Log.i("DisplayItem", "Successfully opened the web page");
-
-				InputStream input = connection.getInputStream();
-				Bitmap bitmap = BitmapFactory.decodeStream(input);
-				input.close();
-
-				return bitmap;
-
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			}
-
-		}
 
 		// This routine is called at the end of the task. This
 		// routine is run as part of the main thread, so it can

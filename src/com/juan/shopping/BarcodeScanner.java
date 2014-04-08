@@ -92,7 +92,7 @@ public class BarcodeScanner extends Activity {
 				try {
 					JSONObject jsonObj = new JSONObject(jsonStr);
 
-					JSONObject data = item.getJSONObject("items");
+					JSONObject data = jsonObj.getJSONObject("items");
 
 					tempItem = new Item();
 					tempItem.setUpc(data.getString("upc"));
