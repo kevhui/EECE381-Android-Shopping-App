@@ -52,7 +52,7 @@ public class DisplayRecommendedList extends ListActivity {
 	private ArrayAdapter<String> adapter;
 	private ImageView iv;
 	JSONObject item = null;
-
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onCreate(Bundle icicle) {

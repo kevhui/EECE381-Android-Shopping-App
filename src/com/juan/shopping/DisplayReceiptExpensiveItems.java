@@ -1,5 +1,9 @@
 package com.juan.shopping;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +12,8 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
@@ -24,6 +30,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.juan.shopping.DisplayReceiptDateItems.GetImage;
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitemodel.ExpensiveListItem;
 import com.juan.shopping.sqlitemodel.HistoryItem;
@@ -42,6 +49,8 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 	ListView list;
 	TextView tv;
 	JSONObject item = null;
+	ImageView iv;
+	
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -121,8 +130,9 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 		Log.d("DisplayHistory",
 				"display pic");
 		// Display the picture
-		int imageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + clickedItem.getUPC(), null,null);
-		iv.setImageResource(imageId);
+		//int imageId = getResources().getIdentifier("com.juan.shopping:drawable/upc" + clickedItem.getUPC(), null,null);
+		//iv.setImageResource(imageId);
+		new GetImage().execute(clickedItem.getUPC());
 
 		// Disable background clicking
 		popupWindow.setFocusable(true);
@@ -229,4 +239,49 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 			adapter.notifyDataSetChanged();
 		}
 	}
+	
+	class GetImage extends AsyncTask<String, Void, Bitmap> {
+
+		// This is the "guts" of the asynchronus task. The code
+		// in doInBackground will be executed in a separate thread
+
+		@Override
+		protected Bitmap doInBackground(String... url_array) {
+			URL url;
+			Log.i("DisplayItem", "Inside the asynchronous task");
+
+			try {
+				url = new URL(url_array[0]);
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoInput(true);
+				connection.connect();
+
+				Log.i("DisplayItem", "Successfully opened the web page");
+
+				InputStream input = connection.getInputStream();
+				Bitmap bitmap = BitmapFactory.decodeStream(input);
+				input.close();
+
+				return bitmap;
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
+		// This routine is called at the end of the task. This
+		// routine is run as part of the main thread, so it can
+		// update the GUI. The input parameter is automatically
+		// set by the output parameter of doInBackground()
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			iv.setImageBitmap(result);
+		}
+	}
+	
+
 }

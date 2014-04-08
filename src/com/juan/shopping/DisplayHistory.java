@@ -1,5 +1,9 @@
 package com.juan.shopping;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NavigableMap;
@@ -10,6 +14,8 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
@@ -29,6 +35,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.juan.shopping.DisplayReceiptDateItems.GetImage;
 import com.juan.shopping.sqlitehelper.CheckoutListDatabaseHelper;
 import com.juan.shopping.sqlitemodel.AverageListItem;
 import com.juan.shopping.sqlitemodel.ExpensiveListItem;
@@ -48,6 +55,8 @@ public class DisplayHistory extends ListActivity {
 	private List<String> names;
 	private List<String> upcList;
 	JSONObject item = null;
+	ImageView iv;
+	ImageView aiv;
 
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -106,10 +115,11 @@ public class DisplayHistory extends ListActivity {
 					+ Integer.toString(popular.get(position).getQuantity()));
 
 			// Display the picture
-			int imageId = getResources().getIdentifier(
-					"com.juan.shopping:drawable/upc" + pclickedItem.getUPC(),
-					null, null);
-			iv.setImageResource(imageId);
+			//int imageId = getResources().getIdentifier(
+			//		"com.juan.shopping:drawable/upc" + pclickedItem.getUPC(),
+			//		null, null);
+			//iv.setImageResource(imageId);
+			new GetImage().execute(pclickedItem.getUPC());
 
 			// Disable background clicking
 			popupWindow.setFocusable(true);
@@ -162,7 +172,7 @@ public class DisplayHistory extends ListActivity {
 					.findViewById(R.id.tvItemQuantityAverage);
 			TextView atvP = (TextView) popupView
 					.findViewById(R.id.tvItemPriceAverage);
-			ImageView aiv = (ImageView) popupView
+			aiv = (ImageView) popupView
 					.findViewById(R.id.ivItemImageAverage);
 
 			atvN.setText("Name: " + names.get(position));
@@ -175,10 +185,11 @@ public class DisplayHistory extends ListActivity {
 							.getAveragePrice()));
 
 			// Display the picture
-			int aimageId = getResources().getIdentifier(
-					"com.juan.shopping:drawable/upc" + aclickedItem.getUPC(),
-					null, null);
-			aiv.setImageResource(aimageId);
+			//int aimageId = getResources().getIdentifier(
+			//		"com.juan.shopping:drawable/upc" + aclickedItem.getUPC(),
+			//		null, null);
+			//aiv.setImageResource(aimageId);
+			new GetImage().execute(aclickedItem.getUPC());
 
 			// Disable background clicking
 			popupWindow.setFocusable(true);
@@ -448,4 +459,89 @@ public class DisplayHistory extends ListActivity {
 			});
 		}
 	}
+	
+	
+	class GetImage extends AsyncTask<String, Void, Bitmap> {
+
+		// This is the "guts" of the asynchronus task. The code
+		// in doInBackground will be executed in a separate thread
+
+		@Override
+		protected Bitmap doInBackground(String... upc) {
+		
+			Log.i("MainActivity", "Inside the asynchronous task");
+
+			// Creating service handler class instance
+			ServiceHandler sh = new ServiceHandler();
+
+			// Making a request to url and getting response
+			String jsonStr = sh.makeServiceCall("http://162.243.133.20/items/"+upc);
+
+			Log.d("Response: ", "> " + jsonStr);
+
+			Item tempItem  = new Item();
+
+			if (jsonStr != null) {
+				try {
+					JSONObject jsonObj = new JSONObject(jsonStr);
+
+					JSONObject data = item.getJSONObject("item");
+
+					tempItem = new Item();
+					tempItem.setImage(data.getString("image"));
+					Log.d("Response: ", "Adding to list: " + tempItem.getName());
+
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			} else {
+				Log.e("ServiceHandler", "Couldn't get any data from the url");
+			}
+
+			
+			URL url;
+			Log.i("DisplayItem", "Inside the asynchronous task");
+
+			
+			
+			try {
+				url = new URL(tempItem.getImage());
+				HttpURLConnection connection = (HttpURLConnection) url
+						.openConnection();
+				connection.setDoInput(true);
+				connection.connect();
+
+				Log.i("DisplayItem", "Successfully opened the web page");
+
+				InputStream input = connection.getInputStream();
+				Bitmap bitmap = BitmapFactory.decodeStream(input);
+				input.close();
+
+				return bitmap;
+
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
+		// This routine is called at the end of the task. This
+		// routine is run as part of the main thread, so it can
+		// update the GUI. The input parameter is automatically
+		// set by the output parameter of doInBackground()
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			if( flagview == 0 ){
+			iv.setImageBitmap(result);
+			}
+			if ( flagview == 1){
+			aiv.setImageBitmap(result);
+			}
+		}
+	}
+	
+	
+	
 }
