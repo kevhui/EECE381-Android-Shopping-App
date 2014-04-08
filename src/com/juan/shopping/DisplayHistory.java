@@ -311,24 +311,15 @@ public class DisplayHistory extends ListActivity {
 	
 	private List<ExpensiveListItem> optionsItemExpenses(){
 		List<String> eDatesList = new ArrayList<String>();
-		List<ExpensiveListItem> temp = new ArrayList<ExpensiveListItem>();
-		ExpensiveListItem eItem = new ExpensiveListItem(0,0);
 		
 		CheckoutListDatabaseHelper cdb;
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
 		List<ExpensiveListItem> expense = cdb.getItemExpensive();
 		cdb.closeDB();
 		
-		while(!expense.isEmpty()){
-			for (ExpensiveListItem item : expense) {
-				if(item.getTotalPrice() > eItem.getTotalPrice()){
-					eItem = item;
-				}
-			}
-			eDatesList.add(eItem.getDate());
-			temp.add(eItem);
-			expense.remove(eItem);
-			eItem = new ExpensiveListItem(0,0);
+
+		for (ExpensiveListItem item : expense) {
+			eDatesList.add(item.getDate());
 		}
 
 		adapter = new ArrayAdapter<String>(this,
@@ -336,7 +327,7 @@ public class DisplayHistory extends ListActivity {
 		setListAdapter(adapter);
 		adapter.notifyDataSetChanged();
 		
-		return temp;
+		return expense;
 	}
 
 }

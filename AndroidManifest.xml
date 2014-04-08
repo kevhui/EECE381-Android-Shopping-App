@@ -106,6 +106,16 @@
                 android:value=".DisplayHistory" />
         </activity>
         <activity
+            android:name=".DisplayReceiptExpensiveItems"
+            android:label="@string/app_name"
+            android:parentActivityName=".DisplayHistory" >
+            
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".DisplayHistory" />
+        </activity>
+        <activity
             android:name=".DisplayRecommendedList"
             android:label="@string/sDisplayRecommendedList"
             android:parentActivityName=".MainActivity" >

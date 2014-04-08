@@ -10,7 +10,7 @@
         android:weightSum="1.0" >
 
         <ListView
-            android:id="@+id/LIST_OF_ITEMS_EXPENSIVE"
+            android:id="@android:id/list"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1.81"

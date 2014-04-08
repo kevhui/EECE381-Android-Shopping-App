@@ -35,6 +35,8 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 	private String expensive;
 	private String total;
 	private ArrayAdapter<String> adapter;
+	ListView list;
+	TextView tv;
 	
 	@Override
 	public void onCreate(Bundle icicle) {
@@ -52,7 +54,6 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 		// Open database and query all items with a certain category
 		CheckoutListDatabaseHelper cdb;
 
-		itemFilteredList = new ArrayList<HistoryItem>();
 		cdb = new CheckoutListDatabaseHelper(getApplicationContext());
 		itemFilteredList = cdb.getItemsByDate(expensive);
 		cdb.closeDB();
@@ -64,8 +65,8 @@ public class DisplayReceiptExpensiveItems extends ListActivity {
 		}
 		db.closeDB();
 		
-		ListView list = (ListView) findViewById(R.id.LIST_OF_ITEMS_EXPENSIVE);
-		TextView tv = (TextView) findViewById(R.id.TOTAL_PRICE_EXPENSIVE);
+		list = (ListView) findViewById(android.R.id.list);
+		tv = (TextView) findViewById(R.id.TOTAL_PRICE_EXPENSIVE);
 		tv.setText("TOTAL: " + total);
 
 		// Display the items
