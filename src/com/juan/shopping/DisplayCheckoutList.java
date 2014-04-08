@@ -176,19 +176,19 @@ public class DisplayCheckoutList extends Activity {
 //		}
 
 		if ( i == 0){
-			upc = "U058779203061";
+			upc = "058779203061";
 		}
 		else if (  i == 1){
-			upc = "U058779278090";
+			upc = "058779278090";
 		}
 		else if (  i == 2){
-			upc = "U055000892957";
+			upc = "055000892957";
 		}
 		else if (  i == 3){
-			upc = "U681131913461";
+			upc = "681131913461";
 		}
 		else if (  i == 4){
-			upc ="U681131913454";
+			upc ="681131913454";
 
 		}
 
@@ -232,7 +232,7 @@ public class DisplayCheckoutList extends Activity {
 	
 
 	public String getConnectToIP() {
-		String ip = "192.168.1.102";
+		String ip = "192.168.0.100";
 		return ip;
 	}
 
@@ -417,46 +417,46 @@ public class DisplayCheckoutList extends Activity {
 		}
 	}
 	
-	public void addItem(View view){
-		MyApplication app = (MyApplication) getApplication();
-
-		// Get the message from the box
-
-		Log.d("Debug","Send message");
-		int i = (int)((Math.random()*100)%4);
-		String upc;
-		
-		if ( i == 0){
-			upc = "073141551342";
-		}
-		else if ( i == 1){
-			upc = "678523080016";
-		}
-		else if ( i == 2){
-			upc = "058807415817";
-		}
-		else{
-			upc = "058807414025";
-		}
-		
-		String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
-
-		StoreDatabaseHelper db = new StoreDatabaseHelper(
-				getApplicationContext());
-		Item i1 = db.getItem(upc);
-		db.closeDB();
-		
-		if (itemExists(upc)){
-		}
-		else {
-			HistoryItem hi = new HistoryItem(upc, i1.getPrice(), currentDate, 1);
-			checkoutList.add(hi);
-			names.add(i1.getName());
-		}
-		totalPrice += i1.getPrice();
-		tv.setText("$" + String.format("%.2f", totalPrice));
-		adapter.notifyDataSetChanged();
-	}
+//	public void addItem(View view){
+//		MyApplication app = (MyApplication) getApplication();
+//
+//		// Get the message from the box
+//
+//		Log.d("Debug","Send message");
+//		int i = (int)((Math.random()*100)%4);
+//		String upc;
+//		
+//		if ( i == 0){
+//			upc = "073141551342";
+//		}
+//		else if ( i == 1){
+//			upc = "678523080016";
+//		}
+//		else if ( i == 2){
+//			upc = "058807415817";
+//		}
+//		else{
+//			upc = "058807414025";
+//		}
+//		
+//		String currentDate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+//
+//		StoreDatabaseHelper db = new StoreDatabaseHelper(
+//				getApplicationContext());
+//		Item i1 = db.getItem(upc);
+//		db.closeDB();
+//		
+//		if (itemExists(upc)){
+//		}
+//		else {
+//			HistoryItem hi = new HistoryItem(upc, i1.getPrice(), currentDate, 1);
+//			checkoutList.add(hi);
+//			names.add(i1.getName());
+//		}
+//		totalPrice += i1.getPrice();
+//		tv.setText("$" + String.format("%.2f", totalPrice));
+//		adapter.notifyDataSetChanged();
+//	}
 	
 	private boolean itemExists(String upc){
 		for (HistoryItem item : checkoutList) {
